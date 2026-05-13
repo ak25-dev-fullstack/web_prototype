@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Shell from './components/layout/Shell';
 import Overview from './pages/Overview';
 import Advisers from './pages/Advisers';
@@ -8,7 +8,7 @@ import Escalations from './pages/Escalations';
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route path="/" element={<Shell />}>
           <Route index element={<Navigate to="/overview" replace />} />
@@ -22,6 +22,6 @@ export default function App() {
           <Route path="settings"      element={<div style={{ fontFamily: "'DM Sans', sans-serif", color: 'var(--text-secondary)', padding: 20 }}>Settings coming soon.</div>} />
         </Route>
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
