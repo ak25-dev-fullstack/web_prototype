@@ -110,7 +110,7 @@ export default function Login() {
         position: 'relative', overflow: 'hidden',
       }}>
         <div style={{ marginBottom: 60 }}>
-          <DWKLogo size="md" />
+          <DWKLogo size="lg" />
         </div>
 
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingBottom: 80 }}>
