@@ -4,8 +4,7 @@ import Card from './Card';
 
 interface StatCardProps {
   label: string;
-  value: number;
-  valueDisplay?: string;
+  value: number | string;
   sub: string;
   icon: ReactNode;
   critical?: boolean;
@@ -34,8 +33,9 @@ function useCountUp(target: number, decimals = 0, duration = 800) {
 }
 
 export default function StatCard({ label, value, sub, icon, critical, decimals = 0 }: StatCardProps) {
-  const count = useCountUp(value, decimals);
-  const display = decimals > 0 ? count.toFixed(decimals) : count.toLocaleString();
+  const numericValue = typeof value === 'number' ? value : 0;
+  const count = useCountUp(numericValue, decimals);
+  const display = typeof value === 'string' ? value : decimals > 0 ? count.toFixed(decimals) : count.toLocaleString();
 
   return (
     <Card

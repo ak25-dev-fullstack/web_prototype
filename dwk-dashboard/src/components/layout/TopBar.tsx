@@ -1,7 +1,17 @@
-import { Search, Bell, HelpCircle } from 'lucide-react';
+import { Search, Bell, HelpCircle, LogOut } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import Avatar from '../ui/Avatar';
+import { useAuth } from '../../context/AuthContext';
 
 export default function TopBar() {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  function handleLogout() {
+    logout();
+    navigate('/login');
+  }
+
   return (
     <header style={{
       height: 56,
@@ -33,7 +43,6 @@ export default function TopBar() {
 
       {/* Right side */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-        {/* Bell */}
         <div style={{ position: 'relative', cursor: 'pointer' }}>
           <Bell size={20} color="var(--text-secondary)" />
           <span style={{
@@ -47,16 +56,30 @@ export default function TopBar() {
         <HelpCircle size={20} color="var(--text-secondary)" style={{ cursor: 'pointer' }} />
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <Avatar initials="JS" size={32} />
+          <Avatar initials={user?.initials ?? 'U'} size={32} />
           <div>
             <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 500, color: 'var(--text-primary)', lineHeight: 1.2 }}>
-              Jonathan Sterling
+              {user?.name ?? ''}
             </div>
             <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.2 }}>
-              Regional Team Manager
+              {user?.title ?? ''}
             </div>
           </div>
         </div>
+
+        <button
+          onClick={handleLogout}
+          title="Sign out"
+          style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            width: 32, height: 32, borderRadius: 8, color: 'var(--text-secondary)',
+            transition: 'background 120ms ease, color 120ms ease',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.background = 'var(--surface-dim)'; e.currentTarget.style.color = 'var(--text-primary)'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-secondary)'; }}
+        >
+          <LogOut size={18} />
+        </button>
       </div>
     </header>
   );
