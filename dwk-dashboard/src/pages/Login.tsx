@@ -5,6 +5,7 @@ import {
 import { Navigate, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Shield } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import DWKLogo from '../components/ui/DWKLogo';
 
 type DemoRole = 'manager' | 'adviser';
 
@@ -108,15 +109,8 @@ export default function Login() {
         display: 'flex', flexDirection: 'column', padding: '48px 44px',
         position: 'relative', overflow: 'hidden',
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 60 }}>
-          <div style={{
-            width: 36, height: 36, borderRadius: 8, background: '#0D9488',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20,
-          }}>🏦</div>
-          <div>
-            <div style={{ fontFamily: "'Sora', sans-serif", fontSize: 16, fontWeight: 700, color: '#FFFFFF' }}>DWK Banking</div>
-            <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: '#A8C4BF' }}>Advisory Platform</div>
-          </div>
+        <div style={{ marginBottom: 60 }}>
+          <DWKLogo size="md" />
         </div>
 
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingBottom: 80 }}>
@@ -149,7 +143,7 @@ export default function Login() {
                   Welcome back
                 </h1>
                 <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: '#4B6B66' }}>
-                  Sign in to your DWK Banking account
+                  Sign in to your DWK Finance account
                 </p>
               </div>
 

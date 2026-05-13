@@ -3,6 +3,7 @@ import {
   LayoutDashboard, Users, TrendingUp, Calendar,
   FileText, ShieldCheck, Settings,
 } from 'lucide-react';
+import DWKLogo from '../ui/DWKLogo';
 
 const navItems = [
   { to: '/adviser/dashboard',   label: 'Dashboard',   Icon: LayoutDashboard },
@@ -37,12 +38,11 @@ export default function FASidebar() {
         padding: '0 16px', gap: 10,
         borderBottom: '1px solid rgba(255,255,255,0.06)', flexShrink: 0,
       }}>
-        <div style={{ width: 28, height: 28, borderRadius: 6, background: '#0D9488', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16 }}>
-          🏦
-        </div>
-        <div>
-          <div style={{ fontFamily: "'Sora', sans-serif", fontSize: 14, fontWeight: 600, color: '#FFFFFF', lineHeight: 1.2 }}>DWK Banking</div>
-          <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: 'var(--sidebar-text)', lineHeight: 1.2 }}>Financial Adviser</div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+          <DWKLogo size="sm" />
+          <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, color: 'var(--sidebar-text)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+            Financial Adviser
+          </span>
         </div>
       </div>
 
