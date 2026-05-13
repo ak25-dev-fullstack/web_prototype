@@ -13,10 +13,17 @@ interface ButtonProps {
 }
 
 const variantStyles: Record<ButtonVariant, CSSProperties> = {
-  primary: { background: '#0D9488', color: '#FFFFFF' },
-  ghost:   { background: 'transparent', color: '#0F2421', border: '1px solid #DDE4E2' },
-  danger:  { background: '#DC2626', color: '#FFFFFF' },
-  dark:    { background: '#0D2B27', color: '#FFFFFF' },
+  primary: { background: '#1E86C3', color: '#FFFFFF' },
+  ghost:   { background: 'rgba(30,134,195,0.12)', color: '#1E86C3', border: '1.5px solid rgba(30,134,195,0.3)' },
+  danger:  { background: 'rgba(239,68,68,0.12)', color: '#EF4444', border: '1.5px solid rgba(239,68,68,0.3)' },
+  dark:    { background: '#263446', color: '#F8FAFC', border: '1px solid #334155' },
+};
+
+const hoverBg: Record<ButtonVariant, string> = {
+  primary: '#1a78b0',
+  ghost:   'rgba(30,134,195,0.2)',
+  danger:  'rgba(239,68,68,0.2)',
+  dark:    '#2e3d52',
 };
 
 export default function Button({ variant = 'primary', children, onClick, icon, style, fullWidth, size = 'md' }: ButtonProps) {
@@ -30,30 +37,21 @@ export default function Button({ variant = 'primary', children, onClick, icon, s
         display: 'inline-flex',
         alignItems: 'center',
         gap: 6,
-        borderRadius: 8,
+        borderRadius: 10,
         padding,
-        fontFamily: "'DM Sans', sans-serif",
+        fontFamily: "'Inter', sans-serif",
         fontSize,
-        fontWeight: 500,
+        fontWeight: 600,
         cursor: 'pointer',
         border: 'none',
-        transition: 'background 120ms ease, box-shadow 120ms ease',
+        transition: 'background 120ms ease',
         width: fullWidth ? '100%' : undefined,
         justifyContent: fullWidth ? 'center' : undefined,
         ...vStyle,
         ...style,
       }}
-      onMouseEnter={e => {
-        const el = e.currentTarget;
-        if (variant === 'primary') el.style.background = '#0F766E';
-        if (variant === 'ghost') el.style.background = '#F4F6F5';
-        if (variant === 'danger') el.style.background = '#B91C1C';
-        if (variant === 'dark') el.style.background = '#0a2220';
-      }}
-      onMouseLeave={e => {
-        const el = e.currentTarget;
-        el.style.background = vStyle.background as string;
-      }}
+      onMouseEnter={e => { e.currentTarget.style.background = hoverBg[variant]; }}
+      onMouseLeave={e => { e.currentTarget.style.background = vStyle.background as string; }}
     >
       {icon}
       {children}

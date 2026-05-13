@@ -3,45 +3,41 @@ interface DWKLogoProps {
 }
 
 const sizes = {
-  sm: { dwk: 17, bar: 13, fin: 8.5,  gap: 5,  barGap: 4 },
-  md: { dwk: 22, bar: 17, fin: 10.5, gap: 6,  barGap: 5 },
-  lg: { dwk: 34, bar: 26, fin: 14,   gap: 9,  barGap: 7 },
+  sm: { dwk: 17, barH: 14, fin: 8.5,  gap: 7,  barW: 1.5 },
+  md: { dwk: 22, barH: 18, fin: 10.5, gap: 8,  barW: 1.5 },
+  lg: { dwk: 34, barH: 27, fin: 14,   gap: 10, barW: 1.5 },
 };
 
 export default function DWKLogo({ size = 'md' }: DWKLogoProps) {
   const s = sizes[size];
-  const purple = '#9585D5';
-  const glow = `0 0 10px rgba(149,133,213,0.55), 0 0 24px rgba(149,133,213,0.20)`;
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: s.gap, lineHeight: 1 }}>
       <span style={{
-        fontFamily: "'Sora', sans-serif",
+        fontFamily: "'Inter', sans-serif",
         fontSize: s.dwk,
         fontWeight: 800,
-        color: purple,
+        color: '#9580C8',
         letterSpacing: '-0.01em',
-        textShadow: glow,
         userSelect: 'none',
       }}>DWK</span>
 
-      <span style={{
-        fontSize: s.bar,
-        fontWeight: 200,
-        color: purple,
-        opacity: 0.45,
-        margin: `0 ${s.barGap - s.gap}px`,
-        userSelect: 'none',
-      }}>|</span>
+      <div style={{
+        width: s.barW,
+        height: s.barH,
+        background: '#A893D4',
+        opacity: 0.7,
+        borderRadius: 1,
+        flexShrink: 0,
+      }} />
 
       <span style={{
-        fontFamily: "'DM Sans', sans-serif",
+        fontFamily: "'Inter', sans-serif",
         fontSize: s.fin,
-        fontWeight: 500,
-        color: purple,
+        fontWeight: 300,
+        color: '#A893D4',
         letterSpacing: '0.22em',
         textTransform: 'uppercase',
-        textShadow: glow,
         userSelect: 'none',
       }}>FINANCE</span>
     </div>

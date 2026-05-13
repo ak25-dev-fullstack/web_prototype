@@ -4,6 +4,7 @@ import Card from '../components/ui/Card';
 import Avatar from '../components/ui/Avatar';
 import Badge from '../components/ui/Badge';
 import ProgressBar from '../components/ui/ProgressBar';
+import ExportButton from '../components/ui/ExportButton';
 
 const recentClients = [
   { initials: 'MC', name: 'Margaret Chen', action: 'Portfolio review completed', time: '2h ago', tag: 'completed' },
@@ -28,17 +29,17 @@ const compliance = [
 ];
 
 const portfolioCategories = [
-  { label: 'Growth Equities', aum: '$8.2M', pct: 78 },
-  { label: 'Fixed Income', aum: '$6.1M', pct: 58 },
-  { label: 'Alternatives', aum: '$7.8M', pct: 74 },
-  { label: 'Cash & Money Market', aum: '$6.3M', pct: 60 },
+  { label: 'Growth Equities', aum: '£8.2M', pct: 78 },
+  { label: 'Fixed Income', aum: '£6.1M', pct: 58 },
+  { label: 'Alternatives', aum: '£7.8M', pct: 74 },
+  { label: 'Cash & Money Market', aum: '£6.3M', pct: 60 },
 ];
 
 const tagVariant: Record<string, string> = {
-  completed: '#059669',
-  pending: '#D97706',
-  due: '#DC2626',
-  new: '#2563EB',
+  completed: '#22C55E',
+  pending: '#F59E0B',
+  due: '#EF4444',
+  new: '#1E86C3',
 };
 
 const tagLabel: Record<string, string> = {
@@ -49,61 +50,64 @@ const tagLabel: Record<string, string> = {
 };
 
 const typeColor: Record<string, string> = {
-  meeting: '#0D9488',
-  call: '#2563EB',
+  meeting: '#1E86C3',
+  call: '#1E86C3',
   internal: '#6B7280',
 };
 
 export default function AdviserDashboard() {
   return (
     <div>
-      <div style={{ marginBottom: 24 }}>
-        <h1 style={{ fontFamily: "'Sora', sans-serif", fontSize: 22, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 4 }}>
-          Good morning, Sarah
-        </h1>
-        <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: 'var(--text-secondary)' }}>
-          You have 4 client meetings and 2 compliance tasks due this week.
-        </p>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
+        <div>
+          <h1 style={{ fontFamily: "'Inter', sans-serif", fontSize: 22, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 4 }}>
+            Good morning, Sarah
+          </h1>
+          <p style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, color: 'var(--text-secondary)' }}>
+            You have 4 client meetings and 2 compliance tasks due this week.
+          </p>
+        </div>
+        <ExportButton />
       </div>
 
       {/* Stat cards */}
-      <div style={{ display: 'flex', gap: 16, marginBottom: 24 }}>
+      <div className="stat-row" style={{ marginBottom: 24 }}>
         <StatCard label="My Clients" value={47} sub="↑ 3 new this month" icon={<Users size={20} />} />
-        <StatCard label="Total AUM" value="$28.4M" sub="↑ 2.3% this quarter" icon={<TrendingUp size={20} />} />
+        <StatCard label="Total AUM" value="£28.4M" sub="↑ 2.3% this quarter" icon={<TrendingUp size={20} />} />
         <StatCard label="Client Satisfaction" value={4.7} sub="Target: 4.5★" icon={<Star size={20} />} decimals={1} />
         <StatCard label="Reviews Due" value={6} sub="Next due in 3 days" icon={<ClipboardList size={20} />} critical />
       </div>
 
-      <div style={{ display: 'flex', gap: 24 }}>
+      <div className="two-col" style={{ gap: 24 }}>
         {/* Left column */}
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 20, minWidth: 0 }}>
 
           {/* Recent client activity */}
           <Card>
-            <div style={{ fontFamily: "'Sora', sans-serif", fontSize: 16, fontWeight: 600, marginBottom: 16 }}>Recent Client Activity</div>
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 16, fontWeight: 600, marginBottom: 16 }}>Recent Client Activity</div>
+            <div className="table-wrap"><table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--divider)' }}>
                   {['CLIENT', 'LAST ACTION', 'TIME', 'STATUS'].map(h => (
-                    <th key={h} style={{ textAlign: 'left', padding: '8px 12px', fontFamily: "'DM Sans', sans-serif", fontSize: 11, fontWeight: 500, color: 'var(--text-tertiary)', letterSpacing: '0.04em', textTransform: 'uppercase' }}>{h}</th>
+                    <th key={h} style={{ textAlign: 'left', padding: '8px 12px', fontFamily: "'Inter', sans-serif", fontSize: 11, fontWeight: 500, color: 'var(--text-tertiary)', letterSpacing: '0.04em', textTransform: 'uppercase' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {recentClients.map((c, i) => (
-                  <tr key={c.name} style={{ background: i % 2 === 0 ? '#fff' : 'var(--neutral-50)', borderBottom: '1px solid var(--divider)' }}>
+                  <tr key={c.name} style={{ background: i % 2 === 0 ? '#1E293B' : '#263446', borderBottom: '1px solid var(--divider)' }}>
                     <td style={{ padding: '12px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                         <Avatar initials={c.initials} size={34} />
-                        <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 500 }}>{c.name}</span>
+                        <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 500 }}>{c.name}</span>
                       </div>
                     </td>
-                    <td style={{ padding: '12px', fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: 'var(--text-secondary)' }}>{c.action}</td>
-                    <td style={{ padding: '12px', fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: 'var(--text-tertiary)', whiteSpace: 'nowrap' }}>{c.time}</td>
+                    <td style={{ padding: '12px', fontFamily: "'Inter', sans-serif", fontSize: 13, color: 'var(--text-secondary)' }}>{c.action}</td>
+                    <td style={{ padding: '12px', fontFamily: "'Inter', sans-serif", fontSize: 12, color: 'var(--text-tertiary)', whiteSpace: 'nowrap' }}>{c.time}</td>
                     <td style={{ padding: '12px' }}>
                       <span style={{
                         display: 'inline-block', padding: '2px 10px', borderRadius: 20,
-                        fontFamily: "'DM Sans', sans-serif", fontSize: 12, fontWeight: 600,
+                        fontFamily: "'Inter', sans-serif", fontSize: 12, fontWeight: 600,
                         background: tagVariant[c.tag] + '18', color: tagVariant[c.tag],
                       }}>
                         {tagLabel[c.tag]}
@@ -112,27 +116,27 @@ export default function AdviserDashboard() {
                   </tr>
                 ))}
               </tbody>
-            </table>
+            </table></div>
           </Card>
 
           {/* Portfolio snapshot */}
           <Card>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-              <span style={{ fontFamily: "'Sora', sans-serif", fontSize: 16, fontWeight: 600 }}>Portfolio Snapshot</span>
-              <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: 'var(--text-secondary)' }}>Total AUM: <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontWeight: 600, color: 'var(--text-primary)' }}>$28.4M</span></span>
+              <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 16, fontWeight: 600 }}>Portfolio Snapshot</span>
+              <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, color: 'var(--text-secondary)' }}>Total AUM: <span style={{ fontFamily: "'JetBrains Mono', monospace", fontWeight: 600, color: 'var(--text-primary)' }}>£28.4M</span></span>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               {portfolioCategories.map(c => (
                 <div key={c.label}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-                    <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: 'var(--text-secondary)' }}>{c.label}</span>
-                    <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 13, fontWeight: 500, color: 'var(--text-primary)' }}>{c.aum}</span>
+                    <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, color: 'var(--text-secondary)' }}>{c.label}</span>
+                    <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13, fontWeight: 500, color: 'var(--text-primary)' }}>{c.aum}</span>
                   </div>
-                  <ProgressBar pct={c.pct} height={8} color="#0D9488" />
+                  <ProgressBar pct={c.pct} height={8} color="#1E86C3" />
                 </div>
               ))}
             </div>
-            <div style={{ marginTop: 16, padding: '10px 14px', background: 'var(--neutral-50)', borderRadius: 8, fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: 'var(--text-secondary)', textAlign: 'center' }}>
+            <div style={{ marginTop: 16, padding: '10px 14px', background: 'var(--neutral-50)', borderRadius: 8, fontFamily: "'Inter', sans-serif", fontSize: 12, color: 'var(--text-secondary)', textAlign: 'center' }}>
               Detailed portfolio analytics coming soon
             </div>
           </Card>
@@ -142,23 +146,23 @@ export default function AdviserDashboard() {
         <div style={{ width: 280, flexShrink: 0, display: 'flex', flexDirection: 'column', gap: 16 }}>
 
           {/* Today's schedule */}
-          <div style={{ background: '#0D2B27', borderRadius: 12, padding: 20 }}>
+          <div style={{ background: '#0A1A2F', borderRadius: 12, padding: 20 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-              <Calendar size={16} color="#2DD4BF" />
-              <span style={{ fontFamily: "'Sora', sans-serif", fontSize: 15, fontWeight: 600, color: '#FFFFFF' }}>Today's Schedule</span>
+              <Calendar size={16} color="#1E86C3" />
+              <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 15, fontWeight: 600, color: '#FFFFFF' }}>Today's Schedule</span>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               {schedule.map((s, i) => (
                 <div key={i} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-                  <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 12, color: '#2DD4BF', flexShrink: 0, marginTop: 2 }}>{s.time}</span>
+                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: '#1E86C3', flexShrink: 0, marginTop: 2 }}>{s.time}</span>
                   <div>
-                    <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500, color: '#FFFFFF', marginBottom: 2 }}>{s.title}</div>
+                    <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, fontWeight: 500, color: '#FFFFFF', marginBottom: 2 }}>{s.title}</div>
                     {s.client && (
-                      <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: '#A8C4BF' }}>{s.client}</div>
+                      <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 12, color: '#94A3B8' }}>{s.client}</div>
                     )}
                     <span style={{
                       display: 'inline-block', marginTop: 2, padding: '1px 8px', borderRadius: 20,
-                      fontFamily: "'DM Sans', sans-serif", fontSize: 11, fontWeight: 600,
+                      fontFamily: "'Inter', sans-serif", fontSize: 11, fontWeight: 600,
                       background: typeColor[s.type] + '25', color: typeColor[s.type],
                     }}>
                       {s.type}
@@ -172,8 +176,8 @@ export default function AdviserDashboard() {
           {/* Compliance checklist */}
           <Card padding={16}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
-              <ShieldCheck size={16} color="#0D9488" />
-              <span style={{ fontFamily: "'Sora', sans-serif", fontSize: 15, fontWeight: 600 }}>Compliance Tasks</span>
+              <ShieldCheck size={16} color="#1E86C3" />
+              <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 15, fontWeight: 600 }}>Compliance Tasks</span>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
               {compliance.map(c => {
@@ -182,17 +186,17 @@ export default function AdviserDashboard() {
                 return (
                   <div key={c.task}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-                      <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: done ? 'var(--text-tertiary)' : 'var(--text-primary)', fontWeight: 500 }}>
+                      <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, color: done ? 'var(--text-tertiary)' : 'var(--text-primary)', fontWeight: 500 }}>
                         {c.task}
                       </span>
-                      <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 12, color: done ? '#059669' : 'var(--text-secondary)' }}>
+                      <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: done ? '#22C55E' : 'var(--text-secondary)' }}>
                         {c.done}/{c.total}
                       </span>
                     </div>
-                    <ProgressBar pct={pct} height={5} color={done ? '#059669' : '#0D9488'} animated={false} />
+                    <ProgressBar pct={pct} height={5} color={done ? '#22C55E' : '#1E86C3'} animated={false} />
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 3 }}>
-                      <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: 'var(--text-tertiary)' }}>Due: {c.due}</span>
-                      {done && <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: '#059669', fontWeight: 600 }}>✓ Done</span>}
+                      <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 11, color: 'var(--text-tertiary)' }}>Due: {c.due}</span>
+                      {done && <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 11, color: '#22C55E', fontWeight: 600 }}>✓ Done</span>}
                     </div>
                   </div>
                 );
@@ -203,8 +207,8 @@ export default function AdviserDashboard() {
           {/* Quick links placeholder */}
           <Card padding={16}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-              <Clock size={16} color="#0D9488" />
-              <span style={{ fontFamily: "'Sora', sans-serif", fontSize: 15, fontWeight: 600 }}>Upcoming Reviews</span>
+              <Clock size={16} color="#1E86C3" />
+              <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 15, fontWeight: 600 }}>Upcoming Reviews</span>
             </div>
             {[
               { name: 'Sophia Andersson', date: '15 May', initials: 'SA' },
@@ -214,8 +218,8 @@ export default function AdviserDashboard() {
               <div key={r.name} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
                 <Avatar initials={r.initials} size={30} />
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500 }}>{r.name}</div>
-                  <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: 'var(--text-tertiary)' }}>{r.date}</div>
+                  <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, fontWeight: 500 }}>{r.name}</div>
+                  <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 12, color: 'var(--text-tertiary)' }}>{r.date}</div>
                 </div>
                 <Badge variant="review-required">Due</Badge>
               </div>

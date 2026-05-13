@@ -19,12 +19,12 @@ function AlignmentBar({ label, pct, delay }: { label: string; pct: number; delay
   return (
     <div style={{ marginBottom: 14 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-        <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: 'var(--text-secondary)' }}>{label}</span>
-        <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 13, color: 'var(--text-primary)', fontWeight: 500 }}>{pct}%</span>
+        <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, color: 'var(--text-secondary)' }}>{label}</span>
+        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13, color: 'var(--text-primary)', fontWeight: 500 }}>{pct}%</span>
       </div>
       <div style={{ height: 8, background: '#EDF0EF', borderRadius: 9999, overflow: 'hidden' }}>
         <div style={{
-          height: '100%', background: '#0D9488', borderRadius: 9999,
+          height: '100%', background: '#1E86C3', borderRadius: 9999,
           width: `${width}%`,
           transition: 'width 600ms cubic-bezier(0.34, 1.56, 0.64, 1)',
         }} />
@@ -42,12 +42,12 @@ function CapacityBar({ current, max }: { current: number; max: number }) {
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-        <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: 'var(--text-secondary)' }}>Client Capacity</span>
-        <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 13, color: 'var(--text-primary)' }}>{current}/{max}</span>
+        <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, color: 'var(--text-secondary)' }}>Client Capacity</span>
+        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13, color: 'var(--text-primary)' }}>{current}/{max}</span>
       </div>
       <div style={{ height: 10, background: '#EDF0EF', borderRadius: 9999, overflow: 'hidden' }}>
         <div style={{
-          height: '100%', background: '#0D9488', borderRadius: 9999,
+          height: '100%', background: '#1E86C3', borderRadius: 9999,
           width: `${width}%`,
           transition: 'width 600ms cubic-bezier(0.34, 1.56, 0.64, 1)',
         }} />
@@ -87,17 +87,17 @@ export default function AdviserProfile() {
               <Avatar initials={morgan.avatar} size={80} />
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
-                  <h1 style={{ fontFamily: "'Sora', sans-serif", fontSize: 24, fontWeight: 600, color: 'var(--text-primary)' }}>{morgan.name}</h1>
-                  <span style={{ border: '1px solid var(--border)', borderRadius: 9999, padding: '2px 10px', fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: 'var(--text-secondary)' }}>{morgan.role}</span>
+                  <h1 style={{ fontFamily: "'Inter', sans-serif", fontSize: 24, fontWeight: 600, color: 'var(--text-primary)' }}>{morgan.name}</h1>
+                  <span style={{ border: '1px solid var(--border)', borderRadius: 9999, padding: '2px 10px', fontFamily: "'Inter', sans-serif", fontSize: 12, color: 'var(--text-secondary)' }}>{morgan.role}</span>
                 </div>
-                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: 'var(--text-secondary)', marginBottom: 10 }}>
+                <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, color: 'var(--text-secondary)', marginBottom: 10 }}>
                   Financial Advisor &bull; {morgan.tenure} Tenure &bull; {morgan.location}
                 </div>
                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                   {morgan.expertise?.map(tag => (
                     <span key={tag} style={{
                       border: '1px solid var(--border)', borderRadius: 9999, padding: '3px 12px', height: 24,
-                      fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: 'var(--text-secondary)',
+                      fontFamily: "'Inter', sans-serif", fontSize: 12, color: 'var(--text-secondary)',
                       display: 'flex', alignItems: 'center',
                     }}>{tag}</span>
                   ))}
@@ -108,18 +108,18 @@ export default function AdviserProfile() {
           </div>
 
           {/* Right dark stats card */}
-          <div style={{ background: '#0D2B27', borderRadius: 12, padding: 20, minWidth: 200 }}>
-            <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: '#A8C4BF', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 6 }}>Total Managed Assets</div>
-            <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 36, fontWeight: 500, color: '#FFFFFF', lineHeight: 1, marginBottom: 4 }}>{morgan.totalAUM}</div>
-            <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: '#2DD4BF', marginBottom: 16 }}>{morgan.aumChange}</div>
+          <div style={{ background: '#0A1A2F', borderRadius: 12, padding: 20, minWidth: 200 }}>
+            <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 11, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 6 }}>Total Managed Assets</div>
+            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 36, fontWeight: 500, color: '#FFFFFF', lineHeight: 1, marginBottom: 4 }}>{morgan.totalAUM}</div>
+            <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 12, color: '#1E86C3', marginBottom: 16 }}>{morgan.aumChange}</div>
             <div style={{ display: 'flex', gap: 24 }}>
               <div>
-                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: '#A8C4BF', marginBottom: 2 }}>Satisfaction</div>
-                <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 18, color: '#FFFFFF' }}>{morgan.satisfaction}<span style={{ fontSize: 13, color: '#A8C4BF' }}>/5</span></div>
+                <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 11, color: '#94A3B8', marginBottom: 2 }}>Satisfaction</div>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 18, color: '#FFFFFF' }}>{morgan.satisfaction}<span style={{ fontSize: 13, color: '#94A3B8' }}>/5</span></div>
               </div>
               <div>
-                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: '#A8C4BF', marginBottom: 2 }}>Retention</div>
-                <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 18, color: '#FFFFFF' }}>{morgan.retention}<span style={{ fontSize: 13, color: '#A8C4BF' }}>%</span></div>
+                <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 11, color: '#94A3B8', marginBottom: 2 }}>Retention</div>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 18, color: '#FFFFFF' }}>{morgan.retention}<span style={{ fontSize: 13, color: '#94A3B8' }}>%</span></div>
               </div>
             </div>
           </div>
@@ -133,7 +133,7 @@ export default function AdviserProfile() {
             key={tab}
             onClick={() => setActiveTab(tab)}
             style={{
-              padding: '10px 20px', fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 500,
+              padding: '10px 20px', fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 500,
               color: activeTab === tab ? 'var(--primary)' : 'var(--text-secondary)',
               borderBottom: activeTab === tab ? '2px solid var(--primary)' : '2px solid transparent',
               background: 'none', border: 'none', cursor: 'pointer',
@@ -150,32 +150,32 @@ export default function AdviserProfile() {
           {/* Performance Trends */}
           <Card style={{ flex: 1 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-              <span style={{ fontFamily: "'Sora', sans-serif", fontSize: 16, fontWeight: 600 }}>Performance Trends</span>
-              <select style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: 'var(--text-secondary)', border: '1px solid var(--border)', borderRadius: 6, padding: '4px 8px', background: 'transparent' }}>
+              <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 16, fontWeight: 600 }}>Performance Trends</span>
+              <select style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, color: 'var(--text-secondary)', border: '1px solid var(--border)', borderRadius: 6, padding: '4px 8px', background: 'transparent' }}>
                 <option>Last 6 Months</option>
               </select>
             </div>
 
             <div style={{ marginBottom: 6 }}>
-              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500, color: 'var(--text-secondary)', marginBottom: 8 }}>Client Satisfaction</div>
+              <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, fontWeight: 500, color: 'var(--text-secondary)', marginBottom: 8 }}>Client Satisfaction</div>
               <ResponsiveContainer width="100%" height={120}>
                 <LineChart data={satData}>
-                  <XAxis dataKey="month" tick={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, fill: '#879E9A' }} axisLine={false} tickLine={false} />
+                  <XAxis dataKey="month" tick={{ fontFamily: "'Inter', sans-serif", fontSize: 11, fill: '#879E9A' }} axisLine={false} tickLine={false} />
                   <Tooltip />
-                  <Legend wrapperStyle={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12 }} />
-                  <Line type="monotone" dataKey="Morgan" stroke="#0D9488" strokeWidth={2} dot={false} />
+                  <Legend wrapperStyle={{ fontFamily: "'Inter', sans-serif", fontSize: 12 }} />
+                  <Line type="monotone" dataKey="Morgan" stroke="#1E86C3" strokeWidth={2} dot={false} />
                   <Line type="monotone" dataKey="Team Avg" stroke="#DDE4E2" strokeWidth={2} strokeDasharray="4 4" dot={false} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
 
             <div>
-              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500, color: 'var(--text-secondary)', marginBottom: 8 }}>Response Time (Hours)</div>
+              <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, fontWeight: 500, color: 'var(--text-secondary)', marginBottom: 8 }}>Response Time (Hours)</div>
               <ResponsiveContainer width="100%" height={120}>
                 <LineChart data={respData}>
-                  <XAxis dataKey="month" tick={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, fill: '#879E9A' }} axisLine={false} tickLine={false} />
+                  <XAxis dataKey="month" tick={{ fontFamily: "'Inter', sans-serif", fontSize: 11, fill: '#879E9A' }} axisLine={false} tickLine={false} />
                   <Tooltip />
-                  <Line type="monotone" dataKey="Morgan" stroke="#0D9488" strokeWidth={2} dot={false} />
+                  <Line type="monotone" dataKey="Morgan" stroke="#1E86C3" strokeWidth={2} dot={false} />
                   <Line type="monotone" dataKey="Team Avg" stroke="#DDE4E2" strokeWidth={2} strokeDasharray="4 4" dot={false} />
                 </LineChart>
               </ResponsiveContainer>
@@ -184,31 +184,31 @@ export default function AdviserProfile() {
 
           {/* Expertise Alignment */}
           <Card style={{ width: 320, flexShrink: 0 }}>
-            <div style={{ fontFamily: "'Sora', sans-serif", fontSize: 16, fontWeight: 600, marginBottom: 20 }}>Expertise Alignment</div>
+            <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 16, fontWeight: 600, marginBottom: 20 }}>Expertise Alignment</div>
             <AlignmentBar label="Tax Advisory Coverage" pct={morgan.expertiseAlignment!.taxAdvisory} delay={100} />
             <AlignmentBar label="Retirement Planning Coverage" pct={morgan.expertiseAlignment!.retirementPlanning} delay={200} />
             <AlignmentBar label="Investment Strategy Coverage" pct={morgan.expertiseAlignment!.investmentStrategy} delay={300} />
 
             {/* Fin anomaly */}
             <div style={{
-              background: '#FFFBEB',
-              borderLeft: '3px solid #D97706',
+              background: 'rgba(245,158,11,0.12)',
+              borderLeft: '3px solid #F59E0B',
               borderRadius: 8,
               padding: 12,
               marginTop: 8,
             }}>
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
                 <div style={{
-                  width: 24, height: 24, borderRadius: '50%', background: '#0D9488',
+                  width: 24, height: 24, borderRadius: '50%', background: '#1E86C3',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                 }}>
                   <Cpu size={12} color="#FFFFFF" />
                 </div>
                 <div>
-                  <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500, color: 'var(--text-primary)', marginBottom: 4 }}>
+                  <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, fontWeight: 500, color: 'var(--text-primary)', marginBottom: 4 }}>
                     Fin spotted an anomaly:
                   </div>
-                  <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+                  <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.5 }}>
                     {morgan.anomaly}
                   </div>
                 </div>
@@ -220,7 +220,7 @@ export default function AdviserProfile() {
 
       {activeTab !== 'Performance' && (
         <Card>
-          <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: 'var(--text-secondary)', padding: '20px 0', textAlign: 'center' }}>
+          <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, color: 'var(--text-secondary)', padding: '20px 0', textAlign: 'center' }}>
             {activeTab} content coming soon.
           </div>
         </Card>

@@ -3,13 +3,13 @@ import type { ReactNode } from 'react';
 type BadgeVariant = 'critical-complaint' | 'capacity-overload' | 'fin-ai-handover' | 'high-match' | 'on-track' | 'review-required' | 'top-performer';
 
 const styles: Record<BadgeVariant, { bg: string; color: string; border?: string }> = {
-  'critical-complaint': { bg: '#FEF2F2', color: '#DC2626', border: '#FECACA' },
-  'capacity-overload':  { bg: '#FFFBEB', color: '#D97706', border: '#FDE68A' },
-  'fin-ai-handover':    { bg: '#EFF6FF', color: '#2563EB', border: '#BFDBFE' },
-  'high-match':         { bg: '#ECFDF5', color: '#059669', border: '#A7F3D0' },
-  'on-track':           { bg: '#ECFDF5', color: '#059669' },
-  'review-required':    { bg: '#FEF2F2', color: '#DC2626' },
-  'top-performer':      { bg: '#0D9488', color: '#FFFFFF' },
+  'critical-complaint': { bg: 'rgba(239,68,68,0.12)',   color: '#EF4444', border: 'rgba(239,68,68,0.3)' },
+  'capacity-overload':  { bg: 'rgba(245,158,11,0.12)',  color: '#F59E0B', border: 'rgba(245,158,11,0.3)' },
+  'fin-ai-handover':    { bg: 'rgba(30,134,195,0.15)',  color: '#1E86C3', border: 'rgba(30,134,195,0.3)' },
+  'high-match':         { bg: 'rgba(34,197,94,0.12)',   color: '#22C55E', border: 'rgba(34,197,94,0.3)' },
+  'on-track':           { bg: 'rgba(34,197,94,0.12)',   color: '#22C55E' },
+  'review-required':    { bg: 'rgba(239,68,68,0.12)',   color: '#EF4444' },
+  'top-performer':      { bg: '#1E86C3',                color: '#FFFFFF' },
 };
 
 interface BadgeProps {
@@ -28,11 +28,11 @@ export default function Badge({ variant, children, icon }: BadgeProps) {
       background: s.bg,
       color: s.color,
       border: s.border ? `1px solid ${s.border}` : undefined,
-      borderRadius: 4,
-      padding: '2px 8px',
-      fontFamily: "'DM Sans', sans-serif",
+      borderRadius: 10,
+      padding: '3px 10px',
+      fontFamily: "'Inter', sans-serif",
       fontSize: 11,
-      fontWeight: 500,
+      fontWeight: 600,
       letterSpacing: '0.04em',
       textTransform: 'uppercase',
       whiteSpace: 'nowrap',

@@ -6,7 +6,7 @@ interface AvatarProps {
   fontSize?: number;
 }
 
-export default function Avatar({ initials, size = 36, bg = '#0D9488', color = '#fff', fontSize }: AvatarProps) {
+export default function Avatar({ initials, size = 36, bg = 'rgba(30,134,195,0.2)', color = '#1E86C3', fontSize }: AvatarProps) {
   const fs = fontSize ?? Math.floor(size * 0.36);
   return (
     <div style={{
@@ -15,11 +15,12 @@ export default function Avatar({ initials, size = 36, bg = '#0D9488', color = '#
       borderRadius: '50%',
       background: bg,
       color,
+      border: '1px solid rgba(30,134,195,0.3)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      fontFamily: "'DM Sans', sans-serif",
-      fontWeight: 500,
+      fontFamily: "'Inter', sans-serif",
+      fontWeight: 600,
       fontSize: fs,
       flexShrink: 0,
     }}>

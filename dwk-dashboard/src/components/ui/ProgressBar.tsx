@@ -7,7 +7,7 @@ interface ProgressBarProps {
   animated?: boolean;
 }
 
-export default function ProgressBar({ pct, height = 6, color = '#0D9488', animated = true }: ProgressBarProps) {
+export default function ProgressBar({ pct, height = 6, color = '#1E86C3', animated = true }: ProgressBarProps) {
   const [width, setWidth] = useState(animated ? 0 : pct);
 
   useEffect(() => {
@@ -17,12 +17,12 @@ export default function ProgressBar({ pct, height = 6, color = '#0D9488', animat
   }, [pct, animated]);
 
   return (
-    <div style={{ height, background: '#EDF0EF', borderRadius: 9999, overflow: 'hidden' }}>
+    <div style={{ height, background: '#334155', borderRadius: 3, overflow: 'hidden' }}>
       <div style={{
         height: '100%',
         width: `${width}%`,
         background: color,
-        borderRadius: 9999,
+        borderRadius: 3,
         transition: animated ? 'width 600ms cubic-bezier(0.34, 1.56, 0.64, 1)' : undefined,
       }} />
     </div>

@@ -47,9 +47,9 @@ export const heatmapData = {
 }
 
 export const clientSegmentation = [
-  { label: 'High Net Worth', pct: 45, color: '#0D9488' },
-  { label: 'Retail Growth',  pct: 30, color: '#2DD4BF' },
-  { label: 'Standard',       pct: 25, color: '#CCFBF1' },
+  { label: 'High Net Worth', pct: 45, color: '#1E86C3' },
+  { label: 'Retail Growth',  pct: 30, color: '#1E86C3' },
+  { label: 'Standard',       pct: 25, color: 'rgba(30,134,195,0.15)' },
 ]
 
 export const aumByCategory = [

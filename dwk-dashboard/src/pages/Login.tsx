@@ -16,10 +16,10 @@ const DEMO = {
 
 const inputBase: React.CSSProperties = {
   width: '100%', height: 44, borderRadius: 10,
-  border: '1.5px solid #DDE4E2', background: '#FAFBFA',
+  border: '1.5px solid #334155', background: '#0F172A',
   paddingLeft: 14, paddingRight: 14,
-  fontFamily: "'DM Sans', sans-serif", fontSize: 14,
-  color: '#0F2421', outline: 'none',
+  fontFamily: "'Inter', sans-serif", fontSize: 14,
+  color: '#F8FAFC', outline: 'none',
   transition: 'border-color 150ms ease',
 };
 
@@ -105,7 +105,7 @@ export default function Login() {
     <div style={{ display: 'flex', minHeight: '100vh' }}>
       {/* Left panel */}
       <div style={{
-        width: 460, flexShrink: 0, background: '#0D2B27',
+        width: 460, flexShrink: 0, background: '#0A1A2F',
         display: 'flex', flexDirection: 'column', padding: '48px 44px',
         position: 'relative', overflow: 'hidden',
       }}>
@@ -114,42 +114,42 @@ export default function Login() {
         </div>
 
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingBottom: 80 }}>
-          <div style={{ fontFamily: "'Sora', sans-serif", fontSize: 30, fontWeight: 700, color: '#FFFFFF', lineHeight: 1.3, marginBottom: 16 }}>
+          <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 30, fontWeight: 700, color: '#FFFFFF', lineHeight: 1.3, marginBottom: 16 }}>
             Manage your team<br />with confidence
           </div>
-          <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: '#A8C4BF', lineHeight: 1.7, marginBottom: 36 }}>
+          <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, color: '#94A3B8', lineHeight: 1.7, marginBottom: 36 }}>
             A unified platform for team managers and financial advisers to track performance, manage clients, and stay compliant.
           </div>
           {['Real-time team performance', 'Client portfolio management', 'Compliance tracking'].map(t => (
             <div key={t} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-              <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#2DD4BF', flexShrink: 0 }} />
-              <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: '#A8C4BF' }}>{t}</span>
+              <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#1E86C3', flexShrink: 0 }} />
+              <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, color: '#94A3B8' }}>{t}</span>
             </div>
           ))}
         </div>
 
-        <div style={{ position: 'absolute', bottom: -100, right: -100, width: 320, height: 320, borderRadius: '50%', border: '1.5px solid rgba(45,212,191,0.10)', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', bottom: -160, right: -160, width: 500, height: 500, borderRadius: '50%', border: '1.5px solid rgba(45,212,191,0.05)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: -100, right: -100, width: 320, height: 320, borderRadius: '50%', border: '1.5px solid rgba(30,134,195,0.12)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: -160, right: -160, width: 500, height: 500, borderRadius: '50%', border: '1.5px solid rgba(30,134,195,0.06)', pointerEvents: 'none' }} />
       </div>
 
       {/* Right panel */}
-      <div style={{ flex: 1, background: '#F4F6F5', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px 40px' }}>
+      <div style={{ flex: 1, background: '#263446', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px 40px' }}>
         <div style={{ width: '100%', maxWidth: 380 }}>
 
           {step === 'creds' ? (
             <>
               <div style={{ marginBottom: 32 }}>
-                <h1 style={{ fontFamily: "'Sora', sans-serif", fontSize: 26, fontWeight: 700, color: '#0F2421', marginBottom: 8 }}>
+                <h1 style={{ fontFamily: "'Inter', sans-serif", fontSize: 26, fontWeight: 700, color: '#F8FAFC', marginBottom: 8 }}>
                   Welcome back
                 </h1>
-                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: '#4B6B66' }}>
+                <p style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, color: '#94A3B8' }}>
                   Sign in to your DWK Finance account
                 </p>
               </div>
 
               {/* Demo fill */}
               <div style={{ marginBottom: 24 }}>
-                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: '#879E9A', marginBottom: 8, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 11, color: '#64748B', marginBottom: 8, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                   Quick demo access
                 </div>
                 <div style={{ display: 'flex', gap: 8 }}>
@@ -160,12 +160,12 @@ export default function Login() {
                       onClick={() => fillDemo(role)}
                       style={{
                         flex: 1, height: 38, borderRadius: 8,
-                        border: '1.5px solid #DDE4E2', background: '#FFFFFF', cursor: 'pointer',
-                        fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500,
-                        color: '#0D9488', transition: 'border-color 150ms ease, background 150ms ease',
+                        border: '1.5px solid #334155', background: '#0F172A', cursor: 'pointer',
+                        fontFamily: "'Inter', sans-serif", fontSize: 13, fontWeight: 500,
+                        color: '#1E86C3', transition: 'border-color 150ms ease, background 150ms ease',
                       }}
-                      onMouseEnter={e => { e.currentTarget.style.borderColor = '#0D9488'; e.currentTarget.style.background = '#F0FDFB'; }}
-                      onMouseLeave={e => { e.currentTarget.style.borderColor = '#DDE4E2'; e.currentTarget.style.background = '#FFFFFF'; }}
+                      onMouseEnter={e => { e.currentTarget.style.borderColor = '#1E86C3'; e.currentTarget.style.background = 'rgba(30,134,195,0.1)'; }}
+                      onMouseLeave={e => { e.currentTarget.style.borderColor = '#334155'; e.currentTarget.style.background = '#0F172A'; }}
                     >
                       {DEMO[role].label}
                     </button>
@@ -174,14 +174,14 @@ export default function Login() {
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
-                <div style={{ flex: 1, height: 1, background: '#DDE4E2' }} />
-                <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: '#879E9A', whiteSpace: 'nowrap' }}>or enter credentials</span>
-                <div style={{ flex: 1, height: 1, background: '#DDE4E2' }} />
+                <div style={{ flex: 1, height: 1, background: '#334155' }} />
+                <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 12, color: '#64748B', whiteSpace: 'nowrap' }}>or enter credentials</span>
+                <div style={{ flex: 1, height: 1, background: '#334155' }} />
               </div>
 
               <form onSubmit={handleCredSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                 <div>
-                  <label style={{ display: 'block', fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500, color: '#0F2421', marginBottom: 6 }}>
+                  <label style={{ display: 'block', fontFamily: "'Inter', sans-serif", fontSize: 13, fontWeight: 500, color: '#F8FAFC', marginBottom: 6 }}>
                     Email
                   </label>
                   <input
@@ -190,14 +190,14 @@ export default function Login() {
                     onChange={e => { setEmail(e.target.value); setCredError(''); }}
                     placeholder="you@dwkbanking.com"
                     style={inputBase}
-                    onFocus={e => { e.currentTarget.style.borderColor = '#0D9488'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(13,148,136,0.10)'; }}
-                    onBlur={e => { e.currentTarget.style.borderColor = '#DDE4E2'; e.currentTarget.style.boxShadow = 'none'; }}
+                    onFocus={e => { e.currentTarget.style.borderColor = '#1E86C3'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(30,134,195,0.12)'; }}
+                    onBlur={e => { e.currentTarget.style.borderColor = '#334155'; e.currentTarget.style.boxShadow = 'none'; }}
                     autoComplete="email"
                   />
                 </div>
 
                 <div>
-                  <label style={{ display: 'block', fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500, color: '#0F2421', marginBottom: 6 }}>
+                  <label style={{ display: 'block', fontFamily: "'Inter', sans-serif", fontSize: 13, fontWeight: 500, color: '#F8FAFC', marginBottom: 6 }}>
                     Password
                   </label>
                   <div style={{ position: 'relative' }}>
@@ -207,14 +207,14 @@ export default function Login() {
                       onChange={e => { setPassword(e.target.value); setCredError(''); }}
                       placeholder="••••••••"
                       style={{ ...inputBase, paddingRight: 44 }}
-                      onFocus={e => { e.currentTarget.style.borderColor = '#0D9488'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(13,148,136,0.10)'; }}
-                      onBlur={e => { e.currentTarget.style.borderColor = '#DDE4E2'; e.currentTarget.style.boxShadow = 'none'; }}
+                      onFocus={e => { e.currentTarget.style.borderColor = '#1E86C3'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(30,134,195,0.12)'; }}
+                      onBlur={e => { e.currentTarget.style.borderColor = '#334155'; e.currentTarget.style.boxShadow = 'none'; }}
                       autoComplete="current-password"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPw(p => !p)}
-                      style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', color: '#879E9A', padding: 2 }}
+                      style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', color: '#64748B', padding: 2 }}
                     >
                       {showPw ? <EyeOff size={18} /> : <Eye size={18} />}
                     </button>
@@ -222,7 +222,7 @@ export default function Login() {
                 </div>
 
                 {credError && (
-                  <div style={{ background: '#FEF2F2', border: '1px solid #FECACA', borderRadius: 8, padding: '10px 14px', fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: '#DC2626' }}>
+                  <div style={{ background: 'rgba(239,68,68,0.12)', border: '1px solid rgba(239,68,68,0.3)', borderRadius: 8, padding: '10px 14px', fontFamily: "'Inter', sans-serif", fontSize: 13, color: '#EF4444' }}>
                     {credError}
                   </div>
                 )}
@@ -230,13 +230,13 @@ export default function Login() {
                 <button
                   type="submit"
                   style={{
-                    width: '100%', height: 44, borderRadius: 10, background: '#0D9488',
-                    color: '#FFFFFF', fontFamily: "'Sora', sans-serif", fontSize: 14, fontWeight: 600,
+                    width: '100%', height: 44, borderRadius: 10, background: '#1E86C3',
+                    color: '#FFFFFF', fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 600,
                     border: 'none', cursor: 'pointer', marginTop: 4,
                     transition: 'background 150ms ease',
                   }}
-                  onMouseEnter={e => { e.currentTarget.style.background = '#0F766E'; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = '#0D9488'; }}
+                  onMouseEnter={e => { e.currentTarget.style.background = '#1a78b0'; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = '#1E86C3'; }}
                 >
                   Continue
                 </button>
@@ -246,21 +246,21 @@ export default function Login() {
             /* 2FA step */
             <>
               <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 28 }}>
-                <div style={{ width: 48, height: 48, borderRadius: 12, background: '#CCFBF1', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <Shield size={24} color="#0D9488" />
+                <div style={{ width: 48, height: 48, borderRadius: 12, background: 'rgba(30,134,195,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <Shield size={24} color="#1E86C3" />
                 </div>
                 <div>
-                  <h1 style={{ fontFamily: "'Sora', sans-serif", fontSize: 20, fontWeight: 700, color: '#0F2421', marginBottom: 4 }}>
+                  <h1 style={{ fontFamily: "'Inter', sans-serif", fontSize: 20, fontWeight: 700, color: '#F8FAFC', marginBottom: 4 }}>
                     Two-factor authentication
                   </h1>
-                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: '#4B6B66' }}>
+                  <p style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, color: '#94A3B8' }}>
                     Code sent to {pendingUser?.email}
                   </p>
                 </div>
               </div>
 
               <div style={{ marginBottom: 20 }}>
-                <label style={{ display: 'block', fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500, color: '#0F2421', marginBottom: 12 }}>
+                <label style={{ display: 'block', fontFamily: "'Inter', sans-serif", fontSize: 13, fontWeight: 500, color: '#F8FAFC', marginBottom: 12 }}>
                   Enter 6-digit code
                 </label>
                 <div style={{ display: 'flex', gap: 8 }}>
@@ -277,24 +277,24 @@ export default function Login() {
                       onPaste={i === 0 ? handlePaste : undefined}
                       style={{
                         width: 48, height: 56, borderRadius: 10,
-                        border: `1.5px solid ${d ? '#0D9488' : '#DDE4E2'}`,
-                        background: d ? '#F0FDFB' : '#FAFBFA',
-                        fontFamily: "'IBM Plex Mono', monospace", fontSize: 22, fontWeight: 600,
-                        color: '#0F2421', textAlign: 'center', outline: 'none',
+                        border: `1.5px solid ${d ? '#1E86C3' : '#334155'}`,
+                        background: d ? 'rgba(30,134,195,0.15)' : '#0F172A',
+                        fontFamily: "'JetBrains Mono', monospace", fontSize: 22, fontWeight: 600,
+                        color: '#F8FAFC', textAlign: 'center', outline: 'none',
                         transition: 'border-color 150ms ease, background 150ms ease',
                       }}
-                      onFocus={e => { e.currentTarget.style.borderColor = '#0D9488'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(13,148,136,0.12)'; }}
-                      onBlur={e => { e.currentTarget.style.borderColor = d ? '#0D9488' : '#DDE4E2'; e.currentTarget.style.boxShadow = 'none'; }}
+                      onFocus={e => { e.currentTarget.style.borderColor = '#1E86C3'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(30,134,195,0.15)'; }}
+                      onBlur={e => { e.currentTarget.style.borderColor = d ? '#1E86C3' : '#334155'; e.currentTarget.style.boxShadow = 'none'; }}
                     />
                   ))}
                 </div>
-                <div style={{ marginTop: 10, padding: '8px 12px', background: '#FFFBEB', border: '1px solid #FDE68A', borderRadius: 8, fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: '#92400E' }}>
-                  Demo code: <strong style={{ fontFamily: "'IBM Plex Mono', monospace" }}>123456</strong>
+                <div style={{ marginTop: 10, padding: '8px 12px', background: 'rgba(245,158,11,0.12)', border: '1px solid rgba(245,158,11,0.3)', borderRadius: 8, fontFamily: "'Inter', sans-serif", fontSize: 12, color: '#92400E' }}>
+                  <span style={{ color: '#F59E0B' }}>Demo code:</span> <strong style={{ fontFamily: "'JetBrains Mono', monospace", color: '#F8FAFC' }}>123456</strong>
                 </div>
               </div>
 
               {tfaError && (
-                <div style={{ background: '#FEF2F2', border: '1px solid #FECACA', borderRadius: 8, padding: '10px 14px', fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: '#DC2626', marginBottom: 16 }}>
+                <div style={{ background: 'rgba(239,68,68,0.12)', border: '1px solid rgba(239,68,68,0.3)', borderRadius: 8, padding: '10px 14px', fontFamily: "'Inter', sans-serif", fontSize: 13, color: '#EF4444', marginBottom: 16 }}>
                   {tfaError}
                 </div>
               )}
@@ -302,7 +302,7 @@ export default function Login() {
               <button
                 type="button"
                 onClick={() => { setStep('creds'); setDigits(['', '', '', '', '', '']); setTfaError(''); }}
-                style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: '#4B6B66', cursor: 'pointer', padding: 0, textDecoration: 'underline' }}
+                style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, color: '#94A3B8', cursor: 'pointer', padding: 0, textDecoration: 'underline' }}
               >
                 ← Back to sign in
               </button>
