@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Award, Cpu } from 'lucide-react';
+import { Award } from 'lucide-react';
 import { LineChart, Line, XAxis, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import Avatar from '../components/ui/Avatar';
 import Badge from '../components/ui/Badge';
@@ -189,7 +189,7 @@ export default function AdviserProfile() {
             <AlignmentBar label="Retirement Planning Coverage" pct={morgan.expertiseAlignment!.retirementPlanning} delay={200} />
             <AlignmentBar label="Investment Strategy Coverage" pct={morgan.expertiseAlignment!.investmentStrategy} delay={300} />
 
-            {/* Fin anomaly */}
+            {/* Expertise anomaly note */}
             <div style={{
               background: 'rgba(245,158,11,0.12)',
               borderLeft: '3px solid #F59E0B',
@@ -197,21 +197,11 @@ export default function AdviserProfile() {
               padding: 12,
               marginTop: 8,
             }}>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
-                <div style={{
-                  width: 24, height: 24, borderRadius: '50%', background: '#1E86C3',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                }}>
-                  <Cpu size={12} color="#FFFFFF" />
-                </div>
-                <div>
-                  <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, fontWeight: 500, color: 'var(--text-primary)', marginBottom: 4 }}>
-                    Fin spotted an anomaly:
-                  </div>
-                  <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-                    {morgan.anomaly}
-                  </div>
-                </div>
+              <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, fontWeight: 500, color: '#F59E0B', marginBottom: 4 }}>
+                Expertise mismatch flagged
+              </div>
+              <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+                {morgan.anomaly}
               </div>
             </div>
           </Card>

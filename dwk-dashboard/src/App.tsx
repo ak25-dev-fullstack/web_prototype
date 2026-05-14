@@ -23,6 +23,7 @@ import SettingsPage from './pages/SettingsPage';
 import TMClients from './pages/tm/TMClients';
 import Reports from './pages/tm/Reports';
 import EducationPage from './pages/fa/EducationPage';
+import FAReports from './pages/fa/FAReports';
 import { Info } from 'lucide-react';
 
 function RequireRole({ role, children }: { role: Role; children: ReactNode }) {
@@ -85,11 +86,11 @@ function AppRoutes() {
           <Route path="dashboard"       element={<AdviserDashboard />} />
           <Route path="clients"         element={<MyClients />} />
           <Route path="clients/:id"     element={<ClientProfile />} />
-          <Route path="portfolio"       element={<FeatureInDevelopment title="Portfolio" />} />
           <Route path="calendar"        element={<CalendarPage />} />
           <Route path="documents"       element={<DocumentsPage />} />
           <Route path="compliance"      element={<CompliancePage />} />
           <Route path="education"       element={<EducationPage />} />
+          <Route path="reports"         element={<FAReports />} />
           <Route path="settings"        element={<SettingsPage />} />
         </Route>
 

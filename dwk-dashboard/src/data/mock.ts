@@ -80,12 +80,12 @@ export const escalations = [
     primaryButton: 'Adjust Load',
   },
   {
-    id: 'ESC-8835', type: 'fin-ai-handover', label: 'FIN AI HANDOVER MISSED',
-    title: 'Complex ISA Transfer Query - Fin AI Flagged for Human',
+    id: 'ESC-8835', type: 'unassigned-handover', label: 'UNASSIGNED — ACTION NEEDED',
+    title: 'Complex ISA Transfer Query — No Adviser Assigned',
     client: { name: 'Mrs. Emily Chen', avatar: 'EC' },
     adviser: null,
     timeAgo: '2 hours ago',
-    actions: ['Review AI Logs'],
+    actions: ['View Case Notes'],
     buttons: ['Assign to Expert'],
     primaryButton: 'Assign to Expert',
   },
@@ -145,7 +145,7 @@ export const communications = [
 export const dailyBriefing = [
   { time: '09:12', type: 'system', text: 'Team performance up 14% vs last week.' },
   { time: '08:45', type: 'alert',  text: '3 Escalations pending in "Assignment" stage.' },
-  { time: 'System', type: 'system', text: 'Morning huddle notes uploaded by Fin.' },
+  { time: 'System', type: 'system', text: 'Morning huddle notes uploaded.' },
 ]
 
 export const performanceTrends = {

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import {
   BarChart2, Download, RefreshCw, Plus, Loader, Trash2, Check,
-  FileText, Clock, LayoutTemplate, X, Star, AlertTriangle, Pencil,
+  FileText, Clock, LayoutTemplate, X, Pencil,
 } from 'lucide-react';
 import {
   BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
@@ -10,70 +10,61 @@ import {
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 import Modal from '../../components/ui/Modal';
-import Avatar from '../../components/ui/Avatar';
 import ProgressBar from '../../components/ui/ProgressBar';
 import ExportButton from '../../components/ui/ExportButton';
 import { useToast } from '../../context/ToastContext';
 import {
-  tmTemplates, tmMetricOptions,
+  faTemplates, faMetricOptions,
   type ReportTemplate, type ReportCategory,
 } from '../../data/reportTemplates';
-import { advisers, performanceTrends } from '../../data/mock';
+import { faClients } from '../../data/faMock';
 
-// ── Mock data for previews ─────────────────────────────────────────────────
+// ── Mock preview data ──────────────────────────────────────────────────────
 
-const aumByMonth = [
-  { month: 'Dec', aum: 94 }, { month: 'Jan', aum: 97 }, { month: 'Feb', aum: 101 },
-  { month: 'Mar', aum: 105 }, { month: 'Apr', aum: 110 }, { month: 'May', aum: 116 },
+const spendingCategories = [
+  { category: 'Housing', amount: 1325 },
+  { category: 'Groceries', amount: 420 },
+  { category: 'Transport', amount: 295 },
+  { category: 'Utilities', amount: 185 },
+  { category: 'Dining', amount: 245 },
+  { category: 'Entertainment', amount: 98 },
+  { category: 'Healthcare', amount: 78 },
+  { category: 'Savings', amount: 535 },
 ];
 
-const aumByAdviser = [
-  { name: 'S. Jenkins', aum: 4.8 }, { name: 'M. Vane', aum: 5.2 },
-  { name: 'E. Rodriguez', aum: 3.9 }, { name: 'D. Thompson', aum: 1.8 },
-  { name: 'M. Alexander', aum: 4.2 },
-];
-
-const csatTrend = performanceTrends.months.map((m, i) => ({
-  month: m,
-  team: performanceTrends.satisfaction.teamAvg[i],
-  target: 4.5,
-}));
-
-const escalationTypes = [
-  { type: 'Critical Complaint', count: 5 },
-  { type: 'Capacity Overload', count: 8 },
-  { type: 'Missed Handover', count: 3 },
-  { type: 'Compliance Flag', count: 4 },
+const incomeVsSpend = [
+  { month: 'Dec', income: 8200, spend: 4900 },
+  { month: 'Jan', income: 8400, spend: 5100 },
+  { month: 'Feb', income: 8100, spend: 4800 },
+  { month: 'Mar', income: 8600, spend: 5300 },
+  { month: 'Apr', income: 9100, spend: 5600 },
+  { month: 'May', income: 8900, spend: 5200 },
 ];
 
 const compliance = [
-  { task: 'KYC Reviews', done: 18, total: 24 },
-  { task: 'Suitability Assessments', done: 12, total: 15 },
-  { task: 'AML Checks', done: 47, total: 47 },
-  { task: 'MiFID II Training', done: 22, total: 24 },
+  { task: 'KYC Reviews', done: 10, total: 12 },
+  { task: 'Suitability Assessments', done: 8, total: 10 },
+  { task: 'AML Checks', done: 12, total: 12 },
+  { task: 'Annual Reviews', done: 7, total: 12 },
 ];
 
-const satisfTrend = performanceTrends.months.map((m, i) => ({
-  month: m,
-  'S. Jenkins': 4.9,
-  'M. Vane': [4.5, 4.6, 4.7, 4.7, 4.8, 4.7][i],
-  'E. Rodriguez': [4.2, 4.1, 4.3, 4.3, 4.2, 4.3][i],
+const reviewStatus = [
+  { name: 'Completed', value: 7 },
+  { name: 'In Progress', value: 3 },
+  { name: 'Overdue', value: 2 },
+];
+
+const savingsData = faClients.slice(0, 6).map(c => ({
+  name: c.initials,
+  rate: parseInt(c.savingsRate),
 }));
 
 const CHART_COLORS = ['#1E86C3', '#22C55E', '#F59E0B', '#EF4444', '#8B5CF6'];
 
 const recentReports = [
-  { id: 'r1', title: 'Team Performance Report', period: 'Weekly', date: '2026-05-18', format: 'PDF' },
-  { id: 'r2', title: 'AUM Growth Report', period: 'Q1 2026', date: '2026-04-01', format: 'Excel' },
-  { id: 'r3', title: 'Compliance Summary', period: 'Q1 2026', date: '2026-04-01', format: 'PDF' },
-  { id: 'r4', title: 'Client Satisfaction Report', period: 'Monthly', date: '2026-05-01', format: 'PDF' },
-  { id: 'r5', title: 'Adviser Leaderboard', period: 'Monthly', date: '2026-05-15', format: 'PDF' },
-];
-
-const scheduled = [
-  { id: 's1', title: 'Team Performance Report', frequency: 'Weekly', nextRun: '20 May 2026', format: 'PDF' },
-  { id: 's2', title: 'Compliance Summary', frequency: 'Monthly', nextRun: '1 Jun 2026', format: 'PDF' },
-  { id: 's3', title: 'AUM Growth Report', frequency: 'Quarterly', nextRun: '1 Jul 2026', format: 'Excel' },
+  { id: 'r2', title: 'Spending Analysis Report', period: 'April 2026', date: '2026-05-01', format: 'PDF' },
+  { id: 'r3', title: 'Compliance Activity Report', period: 'Q1 2026', date: '2026-04-01', format: 'PDF' },
+  { id: 'r4', title: 'Client Review Summary', period: 'Monthly', date: '2026-05-05', format: 'PDF' },
 ];
 
 const DATE_RANGES = ['Last 7 days', 'Last 30 days', 'Last Quarter', 'Last 6 Months', 'Year to Date'];
@@ -89,8 +80,6 @@ const catColor: Record<ReportCategory, string> = {
   Operations: '#F97316',
 };
 
-// ── Shared style helpers ───────────────────────────────────────────────────
-
 const selectSt = {
   height: 36, borderRadius: 8, border: '1px solid var(--border)',
   padding: '0 12px', fontFamily: "'Inter', sans-serif", fontSize: 13,
@@ -102,101 +91,51 @@ const labelSt = {
   color: 'var(--text-secondary)', display: 'block' as const, marginBottom: 6,
 };
 
-// ── Template preview charts ────────────────────────────────────────────────
+// ── Preview components ─────────────────────────────────────────────────────
 
-function PreviewTeamPerformance() {
-  const lines = performanceTrends.months.map((m, i) => ({
-    month: m,
-    'Satisfaction': performanceTrends.satisfaction.teamAvg[i],
-    'Response (hrs)': performanceTrends.responseTime.teamAvg[i],
-  }));
+function PreviewSpending() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
       <div style={{ display: 'flex', gap: 12 }}>
         {[
-          { label: 'Team CSAT', value: '4.82', sub: '↑ 0.12 vs last month' },
-          { label: 'Avg Response', value: '3.7h', sub: '↓ 0.4h improvement' },
-          { label: 'Capacity Avg', value: '72%', sub: '4 advisers tracked' },
-          { label: 'Complaints', value: '8', sub: '3 resolved this week' },
+          { label: 'Avg Monthly Spend', value: '£5,181', sub: 'Across 12 clients' },
+          { label: 'Avg Savings Rate', value: '38%', sub: '↑ 2% vs last period' },
+          { label: 'Highest Category', value: 'Housing', sub: '£1,325 avg' },
+          { label: 'Low Savers', value: '2', sub: 'Clients below 10%' },
         ].map(s => (
           <div key={s.label} style={{ flex: 1, background: '#263446', borderRadius: 10, padding: '12px 14px' }}>
             <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 12, color: 'var(--text-secondary)', marginBottom: 4 }}>{s.label}</div>
-            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 22, fontWeight: 600, color: 'var(--text-primary)', lineHeight: 1, marginBottom: 4 }}>{s.value}</div>
+            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 18, fontWeight: 600, color: 'var(--text-primary)', lineHeight: 1, marginBottom: 4 }}>{s.value}</div>
             <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 11, color: 'var(--text-tertiary)' }}>{s.sub}</div>
           </div>
         ))}
       </div>
       <div>
-        <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 600, marginBottom: 12 }}>Satisfaction & Response Time Trend</div>
+        <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 600, marginBottom: 12 }}>Avg Spending by Category (£/month)</div>
         <ResponsiveContainer width="100%" height={180}>
-          <LineChart data={lines}>
+          <BarChart data={spendingCategories}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+            <XAxis dataKey="category" tick={{ fill: '#64748B', fontSize: 11 }} axisLine={false} tickLine={false} />
+            <YAxis tick={{ fill: '#64748B', fontSize: 12 }} axisLine={false} tickLine={false} />
+            <Tooltip contentStyle={{ background: '#1E293B', border: '1px solid #334155', borderRadius: 8 }} formatter={(v) => [`£${v}`]} />
+            <Bar dataKey="amount" radius={[4, 4, 0, 0]}>
+              {spendingCategories.map((_, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+      <div>
+        <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 600, marginBottom: 12 }}>Avg Income vs Expenditure (£)</div>
+        <ResponsiveContainer width="100%" height={160}>
+          <LineChart data={incomeVsSpend}>
             <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
             <XAxis dataKey="month" tick={{ fill: '#64748B', fontSize: 12 }} axisLine={false} tickLine={false} />
             <YAxis tick={{ fill: '#64748B', fontSize: 12 }} axisLine={false} tickLine={false} />
-            <Tooltip contentStyle={{ background: '#1E293B', border: '1px solid #334155', borderRadius: 8, fontFamily: "'Inter', sans-serif" }} />
+            <Tooltip contentStyle={{ background: '#1E293B', border: '1px solid #334155', borderRadius: 8 }} formatter={(v) => [`£${Number(v).toLocaleString()}`]} />
             <Legend wrapperStyle={{ fontFamily: "'Inter', sans-serif", fontSize: 12 }} />
-            <Line type="monotone" dataKey="Satisfaction" stroke="#1E86C3" strokeWidth={2} dot={false} />
-            <Line type="monotone" dataKey="Response (hrs)" stroke="#F59E0B" strokeWidth={2} dot={false} />
+            <Line type="monotone" dataKey="income" name="Income" stroke="#22C55E" strokeWidth={2} dot={false} />
+            <Line type="monotone" dataKey="spend" name="Expenditure" stroke="#EF4444" strokeWidth={2} dot={false} />
           </LineChart>
-        </ResponsiveContainer>
-      </div>
-      <div>
-        <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 600, marginBottom: 12 }}>Capacity Utilisation by Adviser</div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          {advisers.slice(0, 4).map(a => (
-            <div key={a.id}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-                <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, color: 'var(--text-secondary)' }}>{a.name}</span>
-                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: a.capacityPct > 90 ? '#EF4444' : 'var(--text-primary)' }}>{a.capacityPct}%</span>
-              </div>
-              <ProgressBar pct={a.capacityPct} height={6} color={a.capacityPct > 90 ? '#EF4444' : a.capacityPct > 80 ? '#F59E0B' : '#1E86C3'} animated={false} />
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function PreviewAUM() {
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-      <div style={{ display: 'flex', gap: 12 }}>
-        {[
-          { label: 'Total AUM', value: '£116M', sub: '+23% vs Dec 2025' },
-          { label: 'Avg AUM/Adviser', value: '£23.2M', sub: 'Across 5 advisers' },
-          { label: 'QoQ Growth', value: '+5.5%', sub: 'Q1 → Q2 2026' },
-          { label: 'Largest Portfolio', value: '£5.2M', sub: 'M. Vane' },
-        ].map(s => (
-          <div key={s.label} style={{ flex: 1, background: '#263446', borderRadius: 10, padding: '12px 14px' }}>
-            <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 12, color: 'var(--text-secondary)', marginBottom: 4 }}>{s.label}</div>
-            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 20, fontWeight: 600, color: '#22C55E', lineHeight: 1, marginBottom: 4 }}>{s.value}</div>
-            <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 11, color: 'var(--text-tertiary)' }}>{s.sub}</div>
-          </div>
-        ))}
-      </div>
-      <div>
-        <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 600, marginBottom: 12 }}>AUM Growth Trend (£M)</div>
-        <ResponsiveContainer width="100%" height={180}>
-          <BarChart data={aumByMonth}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-            <XAxis dataKey="month" tick={{ fill: '#64748B', fontSize: 12 }} axisLine={false} tickLine={false} />
-            <YAxis tick={{ fill: '#64748B', fontSize: 12 }} axisLine={false} tickLine={false} domain={[80, 130]} />
-            <Tooltip contentStyle={{ background: '#1E293B', border: '1px solid #334155', borderRadius: 8 }} formatter={(v) => [`£${v}M`, 'AUM']} />
-            <Bar dataKey="aum" fill="#1E86C3" radius={[4, 4, 0, 0]} />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-      <div>
-        <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 600, marginBottom: 12 }}>AUM by Adviser (£M)</div>
-        <ResponsiveContainer width="100%" height={160}>
-          <BarChart data={aumByAdviser} layout="vertical">
-            <CartesianGrid strokeDasharray="3 3" stroke="#334155" horizontal={false} />
-            <XAxis type="number" tick={{ fill: '#64748B', fontSize: 12 }} axisLine={false} tickLine={false} />
-            <YAxis dataKey="name" type="category" tick={{ fill: '#94A3B8', fontSize: 12 }} axisLine={false} tickLine={false} width={90} />
-            <Tooltip contentStyle={{ background: '#1E293B', border: '1px solid #334155', borderRadius: 8 }} formatter={(v) => [`£${v}M`, 'AUM']} />
-            <Bar dataKey="aum" fill="#22C55E" radius={[0, 4, 4, 0]} />
-          </BarChart>
         </ResponsiveContainer>
       </div>
     </div>
@@ -204,14 +143,11 @@ function PreviewAUM() {
 }
 
 function PreviewCompliance() {
-  const pieData = [
-    { name: 'Complete', value: 71 }, { name: 'In Progress', value: 20 }, { name: 'Overdue', value: 9 },
-  ];
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
       <div style={{ display: 'flex', gap: 16 }}>
         <div style={{ flex: 2 }}>
-          <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 600, marginBottom: 14 }}>Completion by Task</div>
+          <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 600, marginBottom: 14 }}>Compliance Task Completion</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             {compliance.map(c => {
               const pct = Math.round((c.done / c.total) * 100);
@@ -227,22 +163,18 @@ function PreviewCompliance() {
             })}
           </div>
         </div>
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 600, marginBottom: 12, alignSelf: 'flex-start' }}>Overall Status</div>
-          <ResponsiveContainer width="100%" height={160}>
-            <PieChart>
-              <Pie data={pieData} cx="50%" cy="50%" innerRadius={45} outerRadius={65} dataKey="value" strokeWidth={0}>
-                {pieData.map((_, i) => <Cell key={i} fill={['#22C55E', '#1E86C3', '#EF4444'][i]} />)}
-              </Pie>
-              <Tooltip contentStyle={{ background: '#1E293B', border: '1px solid #334155', borderRadius: 8 }} formatter={(v) => [`${v}%`]} />
-            </PieChart>
-          </ResponsiveContainer>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 6, width: '100%' }}>
-            {pieData.map((d, i) => (
-              <div key={d.name} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <div style={{ width: 8, height: 8, borderRadius: '50%', background: ['#22C55E', '#1E86C3', '#EF4444'][i], flexShrink: 0 }} />
-                <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 12, color: 'var(--text-secondary)', flex: 1 }}>{d.name}</span>
-                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12 }}>{d.value}%</span>
+        <div style={{ flex: 1 }}>
+          <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 600, marginBottom: 12 }}>Status Overview</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {[
+              { label: 'Fully compliant', value: '7', color: '#22C55E' },
+              { label: 'In progress', value: '3', color: '#1E86C3' },
+              { label: 'Flagged / overdue', value: '2', color: '#EF4444' },
+            ].map(s => (
+              <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px', background: '#263446', borderRadius: 8 }}>
+                <div style={{ width: 8, height: 8, borderRadius: '50%', background: s.color, flexShrink: 0 }} />
+                <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, color: 'var(--text-secondary)', flex: 1 }}>{s.label}</span>
+                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 16, fontWeight: 600, color: s.color }}>{s.value}</span>
               </div>
             ))}
           </div>
@@ -252,137 +184,108 @@ function PreviewCompliance() {
   );
 }
 
-function PreviewCSAT() {
+function PreviewReviews() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
       <div style={{ display: 'flex', gap: 12 }}>
         {[
-          { label: 'Team Avg CSAT', value: '4.82' },
-          { label: 'Highest Adviser', value: '4.9' },
-          { label: 'Complaint Rate', value: '0.54%' },
-          { label: 'Avg Resolution', value: '1.8 days' },
+          { label: 'Reviews Completed', value: '7/12', color: '#22C55E' },
+          { label: 'In Progress', value: '3', color: '#1E86C3' },
+          { label: 'Overdue', value: '2', color: '#EF4444' },
+          { label: 'Avg Completion', value: '4.2 days', color: 'var(--text-primary)' },
         ].map(s => (
           <div key={s.label} style={{ flex: 1, background: '#263446', borderRadius: 10, padding: '12px 14px' }}>
             <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 12, color: 'var(--text-secondary)', marginBottom: 4 }}>{s.label}</div>
-            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 22, fontWeight: 600, color: 'var(--text-primary)', lineHeight: 1 }}>{s.value}</div>
+            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 20, fontWeight: 600, color: s.color, lineHeight: 1 }}>{s.value}</div>
           </div>
         ))}
       </div>
-      <div>
-        <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 600, marginBottom: 12 }}>CSAT Trend vs Target</div>
-        <ResponsiveContainer width="100%" height={180}>
-          <LineChart data={csatTrend}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-            <XAxis dataKey="month" tick={{ fill: '#64748B', fontSize: 12 }} axisLine={false} tickLine={false} />
-            <YAxis tick={{ fill: '#64748B', fontSize: 12 }} axisLine={false} tickLine={false} domain={[4, 5]} />
-            <Tooltip contentStyle={{ background: '#1E293B', border: '1px solid #334155', borderRadius: 8 }} />
-            <Legend wrapperStyle={{ fontFamily: "'Inter', sans-serif", fontSize: 12 }} />
-            <Line type="monotone" dataKey="team" name="Team Avg" stroke="#1E86C3" strokeWidth={2} dot={false} />
-            <Line type="monotone" dataKey="target" name="Target" stroke="#334155" strokeWidth={2} strokeDasharray="4 4" dot={false} />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
-      <div>
-        <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 600, marginBottom: 12 }}>CSAT by Adviser</div>
-        <ResponsiveContainer width="100%" height={140}>
-          <BarChart data={advisers.slice(0, 4).map(a => ({ name: a.avatar, score: a.satisfaction }))}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-            <XAxis dataKey="name" tick={{ fill: '#64748B', fontSize: 12 }} axisLine={false} tickLine={false} />
-            <YAxis tick={{ fill: '#64748B', fontSize: 12 }} axisLine={false} tickLine={false} domain={[4, 5]} />
-            <Tooltip contentStyle={{ background: '#1E293B', border: '1px solid #334155', borderRadius: 8 }} />
-            <Bar dataKey="score" fill="#1E86C3" radius={[4, 4, 0, 0]} name="CSAT" />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-    </div>
-  );
-}
-
-function PreviewLeaderboard() {
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 600, marginBottom: 4 }}>Adviser Rankings</div>
-      {advisers.slice(0, 4).map((a, i) => (
-        <div key={a.id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 14px', background: i === 0 ? 'rgba(30,134,195,0.08)' : '#263446', borderRadius: 10, border: i === 0 ? '1px solid rgba(30,134,195,0.3)' : '1px solid transparent' }}>
-          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 16, fontWeight: 700, color: i === 0 ? '#1E86C3' : 'var(--text-tertiary)', width: 24, textAlign: 'center' }}>#{i + 1}</span>
-          <Avatar initials={a.avatar} size={36} />
-          <div style={{ flex: 1 }}>
-            <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 500 }}>{a.name}</div>
-            <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 12, color: 'var(--text-secondary)' }}>{a.role}</div>
-          </div>
-          <div style={{ textAlign: 'right', minWidth: 60 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 4, justifyContent: 'flex-end', marginBottom: 2 }}>
-              <Star size={13} fill="#1E86C3" color="#1E86C3" />
-              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13 }}>{a.satisfaction}</span>
-            </div>
-            <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 11, color: 'var(--text-tertiary)' }}>{a.clients} clients</div>
-          </div>
-          <div style={{ width: 80 }}>
-            <ProgressBar pct={a.capacityPct} height={6} color={a.capacityPct > 90 ? '#EF4444' : '#1E86C3'} animated={false} />
-            <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 11, color: 'var(--text-tertiary)', marginTop: 2, textAlign: 'right' }}>{a.capacityPct}% cap</div>
+      <div style={{ display: 'flex', gap: 20 }}>
+        <div style={{ flex: 1 }}>
+          <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 600, marginBottom: 12 }}>Review Status Breakdown</div>
+          <ResponsiveContainer width="100%" height={200}>
+            <PieChart>
+              <Pie data={reviewStatus} cx="50%" cy="50%" outerRadius={75} dataKey="value" strokeWidth={0} label={({ name, value }) => `${name}: ${value}`} labelLine={false}>
+                {reviewStatus.map((_, i) => <Cell key={i} fill={['#22C55E', '#1E86C3', '#EF4444'][i]} />)}
+              </Pie>
+              <Tooltip contentStyle={{ background: '#1E293B', border: '1px solid #334155', borderRadius: 8 }} />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+        <div style={{ flex: 1 }}>
+          <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 600, marginBottom: 12 }}>Upcoming Reviews</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {faClients.filter(c => c.status === 'Due' || c.status === 'Review').slice(0, 5).map(c => (
+              <div key={c.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px', background: '#263446', borderRadius: 8 }}>
+                <span style={{ width: 32, height: 32, borderRadius: '50%', background: c.status === 'Due' ? 'rgba(239,68,68,0.15)' : 'rgba(30,134,195,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Inter', sans-serif", fontSize: 12, fontWeight: 600, color: c.status === 'Due' ? '#EF4444' : '#1E86C3', flexShrink: 0 }}>{c.initials}</span>
+                <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, flex: 1 }}>{c.name}</span>
+                <span style={{ padding: '2px 8px', borderRadius: 20, fontSize: 11, fontFamily: "'Inter', sans-serif", background: c.status === 'Due' ? 'rgba(239,68,68,0.12)' : 'rgba(30,134,195,0.12)', color: c.status === 'Due' ? '#EF4444' : '#1E86C3' }}>{c.status}</span>
+              </div>
+            ))}
           </div>
         </div>
-      ))}
+      </div>
     </div>
   );
 }
 
-function PreviewEscalations() {
+function PreviewSavings() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
       <div style={{ display: 'flex', gap: 12 }}>
         {[
-          { label: 'Total Escalations', value: '20', color: 'var(--text-primary)' },
-          { label: 'Critical', value: '5', color: '#EF4444' },
-          { label: 'Avg Resolution', value: '2.3 days', color: 'var(--text-primary)' },
-          { label: 'Open Rate', value: '60%', color: '#F59E0B' },
+          { label: 'Avg Savings Rate', value: '38%', sub: '↑ 2% vs last period' },
+          { label: 'ISA Contributions', value: '£48.2K', sub: 'YTD total' },
+          { label: 'Pension Contribs', value: '£41.7K', sub: 'YTD total' },
+          { label: 'Below Target', value: '2', sub: 'Clients < 20% rate' },
         ].map(s => (
           <div key={s.label} style={{ flex: 1, background: '#263446', borderRadius: 10, padding: '12px 14px' }}>
             <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 12, color: 'var(--text-secondary)', marginBottom: 4 }}>{s.label}</div>
-            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 22, fontWeight: 600, color: s.color, lineHeight: 1 }}>{s.value}</div>
+            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 20, fontWeight: 600, color: '#22C55E', lineHeight: 1, marginBottom: 4 }}>{s.value}</div>
+            <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 11, color: 'var(--text-tertiary)' }}>{s.sub}</div>
           </div>
         ))}
       </div>
       <div>
-        <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 600, marginBottom: 12 }}>Escalations by Type</div>
-        <ResponsiveContainer width="100%" height={180}>
-          <BarChart data={escalationTypes}>
+        <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 600, marginBottom: 12 }}>Savings Rate by Client (%)</div>
+        <ResponsiveContainer width="100%" height={200}>
+          <BarChart data={savingsData}>
             <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-            <XAxis dataKey="type" tick={{ fill: '#64748B', fontSize: 11 }} axisLine={false} tickLine={false} />
-            <YAxis tick={{ fill: '#64748B', fontSize: 12 }} axisLine={false} tickLine={false} />
-            <Tooltip contentStyle={{ background: '#1E293B', border: '1px solid #334155', borderRadius: 8 }} />
-            <Bar dataKey="count" radius={[4, 4, 0, 0]}>
-              {escalationTypes.map((_, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
+            <XAxis dataKey="name" tick={{ fill: '#64748B', fontSize: 12 }} axisLine={false} tickLine={false} />
+            <YAxis tick={{ fill: '#64748B', fontSize: 12 }} axisLine={false} tickLine={false} domain={[0, 70]} unit="%" />
+            <Tooltip contentStyle={{ background: '#1E293B', border: '1px solid #334155', borderRadius: 8 }} formatter={(v) => [`${v}%`, 'Savings Rate']} />
+            <Bar dataKey="rate" radius={[4, 4, 0, 0]}>
+              {savingsData.map((d, i) => <Cell key={i} fill={d.rate < 20 ? '#EF4444' : d.rate < 35 ? '#F59E0B' : '#22C55E'} />)}
             </Bar>
           </BarChart>
         </ResponsiveContainer>
       </div>
       <div>
-        <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 600, marginBottom: 12 }}>Satisfaction Trend by Adviser</div>
-        <ResponsiveContainer width="100%" height={160}>
-          <LineChart data={satisfTrend}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-            <XAxis dataKey="month" tick={{ fill: '#64748B', fontSize: 12 }} axisLine={false} tickLine={false} />
-            <YAxis tick={{ fill: '#64748B', fontSize: 12 }} axisLine={false} tickLine={false} domain={[4, 5]} />
-            <Tooltip contentStyle={{ background: '#1E293B', border: '1px solid #334155', borderRadius: 8 }} />
-            <Legend wrapperStyle={{ fontFamily: "'Inter', sans-serif", fontSize: 11 }} />
-            <Line type="monotone" dataKey="S. Jenkins" stroke="#1E86C3" strokeWidth={2} dot={false} />
-            <Line type="monotone" dataKey="M. Vane" stroke="#22C55E" strokeWidth={2} dot={false} />
-            <Line type="monotone" dataKey="E. Rodriguez" stroke="#F59E0B" strokeWidth={2} dot={false} />
-          </LineChart>
-        </ResponsiveContainer>
+        <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 600, marginBottom: 10 }}>Savings Rate Targets</div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {faClients.slice(0, 6).map(c => {
+            const rate = parseInt(c.savingsRate);
+            return (
+              <div key={c.id}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+                  <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, color: 'var(--text-secondary)' }}>{c.name}</span>
+                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: rate < 20 ? '#EF4444' : '#22C55E' }}>{c.savingsRate}</span>
+                </div>
+                <ProgressBar pct={rate} height={5} color={rate < 20 ? '#EF4444' : rate < 35 ? '#F59E0B' : '#22C55E'} animated={false} />
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
 }
 
 const PREVIEWS: Record<string, React.FC> = {
-  'tm-perf': PreviewTeamPerformance,
-  'tm-aum': PreviewAUM,
-  'tm-compliance': PreviewCompliance,
-  'tm-csat': PreviewCSAT,
-  'tm-leaderboard': PreviewLeaderboard,
-  'tm-escalations': PreviewEscalations,
+  'fa-spending': PreviewSpending,
+  'fa-compliance': PreviewCompliance,
+  'fa-reviews': PreviewReviews,
+  'fa-savings': PreviewSavings,
 };
 
 // ── Template card ──────────────────────────────────────────────────────────
@@ -397,23 +300,14 @@ function TemplateCard({ t, active, onSelect, onDelete }: {
         border: active ? '2px solid #1E86C3' : '1px solid var(--border)',
         borderRadius: 12, background: active ? 'rgba(30,134,195,0.06)' : '#1E293B',
         padding: '14px 16px', cursor: 'pointer', transition: 'all 150ms ease',
-        position: 'relative',
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
-        <span style={{
-          padding: '2px 8px', borderRadius: 20, fontSize: 11, fontWeight: 500,
-          fontFamily: "'Inter', sans-serif",
-          background: catColor[t.category] + '20', color: catColor[t.category],
-        }}>{t.category}</span>
+        <span style={{ padding: '2px 8px', borderRadius: 20, fontSize: 11, fontWeight: 500, fontFamily: "'Inter', sans-serif", background: catColor[t.category] + '20', color: catColor[t.category] }}>{t.category}</span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-          {t.isPrebuilt && (
-            <span style={{ padding: '2px 8px', borderRadius: 20, fontSize: 11, fontFamily: "'Inter', sans-serif", background: '#263446', color: 'var(--text-tertiary)' }}>Pre-built</span>
-          )}
+          {t.isPrebuilt && <span style={{ padding: '2px 8px', borderRadius: 20, fontSize: 11, fontFamily: "'Inter', sans-serif", background: '#263446', color: 'var(--text-tertiary)' }}>Pre-built</span>}
           {!t.isPrebuilt && onDelete && (
-            <button
-              onClick={e => { e.stopPropagation(); onDelete(); }}
-              style={{ display: 'flex', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-tertiary)', padding: 2, borderRadius: 4 }}
+            <button onClick={e => { e.stopPropagation(); onDelete(); }} style={{ display: 'flex', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-tertiary)', padding: 2, borderRadius: 4 }}
               onMouseEnter={e => { e.currentTarget.style.color = '#EF4444'; }}
               onMouseLeave={e => { e.currentTarget.style.color = 'var(--text-tertiary)'; }}
             >
@@ -422,36 +316,33 @@ function TemplateCard({ t, active, onSelect, onDelete }: {
           )}
         </div>
       </div>
-      <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 600, marginBottom: 6, color: active ? 'var(--text-primary)' : 'var(--text-primary)' }}>{t.name}</div>
+      <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 600, marginBottom: 6 }}>{t.name}</div>
       <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.5, marginBottom: 10 }}>{t.description}</div>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
         {t.metrics.slice(0, 3).map(m => (
           <span key={m} style={{ padding: '2px 8px', borderRadius: 20, fontSize: 11, fontFamily: "'Inter', sans-serif", background: '#263446', color: 'var(--text-secondary)' }}>{m}</span>
         ))}
-        {t.metrics.length > 3 && (
-          <span style={{ padding: '2px 8px', borderRadius: 20, fontSize: 11, fontFamily: "'Inter', sans-serif", background: '#263446', color: 'var(--text-tertiary)' }}>+{t.metrics.length - 3} more</span>
-        )}
+        {t.metrics.length > 3 && <span style={{ padding: '2px 8px', borderRadius: 20, fontSize: 11, fontFamily: "'Inter', sans-serif", background: '#263446', color: 'var(--text-tertiary)' }}>+{t.metrics.length - 3} more</span>}
       </div>
     </div>
   );
 }
 
-// ── Main component ─────────────────────────────────────────────────────────
+// ── Main ──────────────────────────────────────────────────────────────────
 
-export default function Reports() {
+export default function FAReports() {
   const { showToast } = useToast();
   const [tab, setTab] = useState<'templates' | 'generated' | 'scheduled'>('templates');
-  const [selected, setSelected] = useState<ReportTemplate | null>(tmTemplates[0]);
+  const [selected, setSelected] = useState<ReportTemplate | null>(faTemplates[0]);
   const [dateRange, setDateRange] = useState('Last 30 days');
   const [generating, setGenerating] = useState(false);
   const [generated, setGenerated] = useState(false);
 
-  // custom templates
   const [customTemplates, setCustomTemplates] = useState<ReportTemplate[]>([]);
   const [createOpen, setCreateOpen] = useState(false);
   const [customiseOpen, setCustomiseOpen] = useState(false);
   const [newName, setNewName] = useState('');
-  const [newCat, setNewCat] = useState<ReportCategory>('Performance');
+  const [newCat, setNewCat] = useState<ReportCategory>('Financial');
   const [newMetrics, setNewMetrics] = useState<string[]>([]);
   const [newDesc, setNewDesc] = useState('');
 
@@ -464,23 +355,24 @@ export default function Reports() {
     setCustomiseOpen(true);
   }
 
-  // schedule form
   const [schedFreq, setSchedFreq] = useState('Monthly');
   const [schedFormat, setSchedFormat] = useState('PDF');
-  const [schedReports, setSchedReports] = useState(scheduled);
+  const [schedReports, setSchedReports] = useState([
+    { id: 's1', title: 'Client Portfolio Overview', frequency: 'Monthly', nextRun: '1 Jun 2026', format: 'PDF' },
+    { id: 's2', title: 'Compliance Activity Report', frequency: 'Quarterly', nextRun: '1 Jul 2026', format: 'PDF' },
+  ]);
 
-  const allTemplates = [...tmTemplates, ...customTemplates];
+  const allTemplates = [...faTemplates, ...customTemplates];
 
   function handleGenerate() {
-    setGenerating(true);
-    setGenerated(false);
+    setGenerating(true); setGenerated(false);
     setTimeout(() => { setGenerating(false); setGenerated(true); }, 1500);
   }
 
   function handleCreateTemplate() {
     if (!newName.trim()) return;
     const t: ReportTemplate = {
-      id: `custom-${Date.now()}`,
+      id: `fa-custom-${Date.now()}`,
       name: newName.trim(),
       description: newDesc.trim() || `Custom ${newCat} report.`,
       category: newCat,
@@ -490,13 +382,13 @@ export default function Reports() {
     setCustomTemplates(p => [...p, t]);
     setSelected(t);
     setCreateOpen(false);
-    setNewName(''); setNewDesc(''); setNewMetrics([]); setNewCat('Performance');
+    setNewName(''); setNewDesc(''); setNewMetrics([]); setNewCat('Financial');
     showToast(`Template "${t.name}" saved.`);
   }
 
   function handleDeleteTemplate(id: string) {
     setCustomTemplates(p => p.filter(t => t.id !== id));
-    if (selected?.id === id) setSelected(tmTemplates[0]);
+    if (selected?.id === id) setSelected(faTemplates[0]);
     showToast('Template deleted.');
   }
 
@@ -508,6 +400,7 @@ export default function Reports() {
   }
 
   const csvData = recentReports.map(r => ({ Title: r.title, Period: r.period, Date: r.date, Format: r.format }));
+  const PreviewChart = selected ? PREVIEWS[selected.id] : null;
 
   const tabs = [
     { id: 'templates' as const, label: 'Templates', Icon: LayoutTemplate },
@@ -515,58 +408,44 @@ export default function Reports() {
     { id: 'scheduled' as const, label: 'Scheduled', Icon: Clock },
   ];
 
-  const PreviewChart = selected ? PREVIEWS[selected.id] : null;
-
   return (
     <div>
-      {/* Header */}
       <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
         <div>
           <h1 style={{ fontFamily: "'Inter', sans-serif", fontSize: 22, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 4 }}>Reports</h1>
           <p style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, color: 'var(--text-secondary)' }}>
-            Build, preview, and schedule reports from pre-built or custom templates.
+            Build, preview, and schedule client reports from pre-built or custom templates.
           </p>
         </div>
         <div className="header-actions" style={{ display: 'flex', gap: 10 }}>
-          <ExportButton csvData={csvData} csvFilename="reports-index.csv" />
+          <ExportButton csvData={csvData} csvFilename="fa-reports-index.csv" />
           <Button variant="primary" icon={<Plus size={14} />} onClick={() => setCreateOpen(true)}>New Template</Button>
         </div>
       </div>
 
-      {/* Tabs */}
       <div style={{ display: 'flex', gap: 0, borderBottom: '1px solid var(--border)', marginBottom: 24 }}>
         {tabs.map(t => (
-          <button
-            key={t.id}
-            onClick={() => setTab(t.id)}
-            style={{
-              display: 'flex', alignItems: 'center', gap: 7,
-              padding: '10px 18px', background: 'none', border: 'none', cursor: 'pointer',
-              fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: tab === t.id ? 600 : 400,
-              color: tab === t.id ? '#1E86C3' : 'var(--text-secondary)',
-              borderBottom: tab === t.id ? '2px solid #1E86C3' : '2px solid transparent',
-              marginBottom: -1, transition: 'color 120ms ease',
-            }}
-          >
+          <button key={t.id} onClick={() => setTab(t.id)} style={{
+            display: 'flex', alignItems: 'center', gap: 7,
+            padding: '10px 18px', background: 'none', border: 'none', cursor: 'pointer',
+            fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: tab === t.id ? 600 : 400,
+            color: tab === t.id ? '#1E86C3' : 'var(--text-secondary)',
+            borderBottom: tab === t.id ? '2px solid #1E86C3' : '2px solid transparent',
+            marginBottom: -1, transition: 'color 120ms ease',
+          }}>
             <t.Icon size={15} />
             {t.label}
           </button>
         ))}
       </div>
 
-      {/* ── Templates tab ── */}
       {tab === 'templates' && (
         <div style={{ display: 'flex', gap: 20, alignItems: 'flex-start' }}>
-          {/* Left: template list */}
           <div style={{ width: 300, flexShrink: 0, display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {tmTemplates.length > 0 && (
-              <>
-                <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 12, fontWeight: 600, color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 2 }}>Pre-built</div>
-                {tmTemplates.map(t => (
-                  <TemplateCard key={t.id} t={t} active={selected?.id === t.id} onSelect={() => { setSelected(t); setGenerated(false); }} />
-                ))}
-              </>
-            )}
+            <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 12, fontWeight: 600, color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 2 }}>Pre-built</div>
+            {faTemplates.map(t => (
+              <TemplateCard key={t.id} t={t} active={selected?.id === t.id} onSelect={() => { setSelected(t); setGenerated(false); }} />
+            ))}
             {customTemplates.length > 0 && (
               <>
                 <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 12, fontWeight: 600, color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginTop: 8, marginBottom: 2 }}>My Templates</div>
@@ -577,7 +456,6 @@ export default function Reports() {
             )}
           </div>
 
-          {/* Right: preview panel */}
           <div style={{ flex: 1, minWidth: 0 }}>
             {selected ? (
               <div>
@@ -591,8 +469,7 @@ export default function Reports() {
                       <p style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, color: 'var(--text-secondary)' }}>{selected.description}</p>
                     </div>
                   </div>
-
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16, flexWrap: 'wrap' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
                     <div>
                       <label style={labelSt}>Date Range</label>
                       <select value={dateRange} onChange={e => setDateRange(e.target.value)} style={selectSt}>
@@ -619,16 +496,13 @@ export default function Reports() {
                       )}
                     </div>
                   </div>
-
                   {generated && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px', background: 'var(--success-bg)', borderRadius: 8, border: '1px solid var(--success-border)', marginBottom: 8 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px', background: 'var(--success-bg)', borderRadius: 8, border: '1px solid var(--success-border)', marginTop: 14 }}>
                       <Check size={15} color="#22C55E" />
                       <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, color: '#22C55E' }}>Report generated — {dateRange}</span>
                     </div>
                   )}
                 </Card>
-
-                {/* Live preview */}
                 <Card>
                   <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 15, fontWeight: 600, marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8 }}>
                     <BarChart2 size={16} color="#1E86C3" />
@@ -638,13 +512,10 @@ export default function Reports() {
                   {PreviewChart ? (
                     <PreviewChart />
                   ) : (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-                      <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, color: 'var(--text-secondary)', marginBottom: 8 }}>Metrics included in this report:</div>
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                        {selected.metrics.map(m => (
-                          <span key={m} style={{ padding: '6px 12px', borderRadius: 20, background: '#263446', fontFamily: "'Inter', sans-serif", fontSize: 13, color: 'var(--text-primary)' }}>{m}</span>
-                        ))}
-                      </div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                      {selected.metrics.map(m => (
+                        <span key={m} style={{ padding: '6px 12px', borderRadius: 20, background: '#263446', fontFamily: "'Inter', sans-serif", fontSize: 13, color: 'var(--text-primary)' }}>{m}</span>
+                      ))}
                     </div>
                   )}
                 </Card>
@@ -658,7 +529,6 @@ export default function Reports() {
         </div>
       )}
 
-      {/* ── Generated Reports tab ── */}
       {tab === 'generated' && (
         <Card>
           <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 16, fontWeight: 600, marginBottom: 16 }}>Generated Reports</div>
@@ -699,13 +569,12 @@ export default function Reports() {
         </Card>
       )}
 
-      {/* ── Scheduled tab ── */}
       {tab === 'scheduled' && (
         <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap', alignItems: 'flex-start' }}>
           <Card style={{ flex: 2, minWidth: 320 }}>
             <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 16, fontWeight: 600, marginBottom: 16 }}>Active Schedules</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              {schedReports.map((s, i) => (
+              {schedReports.map(s => (
                 <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '12px 14px', background: '#263446', borderRadius: 10 }}>
                   <Clock size={16} color="#1E86C3" style={{ flexShrink: 0 }} />
                   <div style={{ flex: 1 }}>
@@ -715,14 +584,11 @@ export default function Reports() {
                     </div>
                   </div>
                   <span style={{ padding: '2px 8px', borderRadius: 20, fontFamily: "'Inter', sans-serif", fontSize: 12, background: s.format === 'PDF' ? 'rgba(239,68,68,0.12)' : 'rgba(34,197,94,0.12)', color: s.format === 'PDF' ? '#EF4444' : '#22C55E' }}>{s.format}</span>
-                  <button
-                    onClick={() => { setSchedReports(p => p.filter(x => x.id !== s.id)); showToast('Schedule removed.'); }}
+                  <button onClick={() => { setSchedReports(p => p.filter(x => x.id !== s.id)); showToast('Schedule removed.'); }}
                     style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-tertiary)', padding: 4, borderRadius: 4, display: 'flex' }}
                     onMouseEnter={e => { e.currentTarget.style.color = '#EF4444'; }}
                     onMouseLeave={e => { e.currentTarget.style.color = 'var(--text-tertiary)'; }}
-                  >
-                    <X size={15} />
-                  </button>
+                  ><X size={15} /></button>
                 </div>
               ))}
               {schedReports.length === 0 && (
@@ -730,17 +596,12 @@ export default function Reports() {
               )}
             </div>
           </Card>
-
           <Card style={{ flex: 1, minWidth: 260 }}>
             <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 16, fontWeight: 600, marginBottom: 16 }}>Schedule a Report</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
               <div>
                 <label style={labelSt}>Report Template</label>
-                <select
-                  value={selected?.id ?? ''}
-                  onChange={e => setSelected(allTemplates.find(t => t.id === e.target.value) ?? null)}
-                  style={{ ...selectSt, width: '100%' }}
-                >
+                <select value={selected?.id ?? ''} onChange={e => setSelected(allTemplates.find(t => t.id === e.target.value) ?? null)} style={{ ...selectSt, width: '100%' }}>
                   {allTemplates.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
                 </select>
               </div>
@@ -774,7 +635,7 @@ export default function Reports() {
             <Button variant="primary" icon={<Check size={14} />} onClick={() => {
               if (!newName.trim()) return;
               const t: ReportTemplate = {
-                id: `custom-${Date.now()}`,
+                id: `fa-custom-${Date.now()}`,
                 name: newName.trim(),
                 description: newDesc.trim() || selected?.description ?? '',
                 category: newCat,
@@ -819,7 +680,7 @@ export default function Reports() {
           <div>
             <label style={labelSt}>Metrics</label>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, maxHeight: 200, overflowY: 'auto', padding: '4px 0' }}>
-              {tmMetricOptions.map(m => {
+              {faMetricOptions.map(m => {
                 const active = newMetrics.includes(m);
                 return (
                   <button key={m} onClick={() => setNewMetrics(p => active ? p.filter(x => x !== m) : [...p, m])} style={{
@@ -841,12 +702,7 @@ export default function Reports() {
         </div>
       </Modal>
 
-      {/* ── Create Template modal ── */}
-      <Modal
-        open={createOpen}
-        onClose={() => setCreateOpen(false)}
-        title="New Report Template"
-        width={560}
+      <Modal open={createOpen} onClose={() => setCreateOpen(false)} title="New Report Template" width={560}
         footer={
           <>
             <Button variant="ghost" onClick={() => setCreateOpen(false)}>Cancel</Button>
@@ -857,69 +713,49 @@ export default function Reports() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div>
             <label style={labelSt}>Template Name</label>
-            <input
-              value={newName}
-              onChange={e => setNewName(e.target.value)}
-              placeholder="e.g. Monthly Revenue Summary"
-              style={{ width: '100%', ...selectSt, padding: '0 12px' }}
-            />
+            <input value={newName} onChange={e => setNewName(e.target.value)} placeholder="e.g. Quarterly Client Summary"
+              style={{ width: '100%', ...selectSt, padding: '0 12px' }} />
           </div>
           <div>
             <label style={labelSt}>Description <span style={{ color: 'var(--text-tertiary)', fontWeight: 400 }}>(optional)</span></label>
-            <textarea
-              value={newDesc}
-              onChange={e => setNewDesc(e.target.value)}
-              placeholder="What does this report cover?"
-              style={{ width: '100%', minHeight: 64, borderRadius: 8, border: '1px solid var(--border)', padding: '8px 12px', fontFamily: "'Inter', sans-serif", fontSize: 13, color: 'var(--text-primary)', background: '#1E293B', resize: 'vertical' }}
-            />
+            <textarea value={newDesc} onChange={e => setNewDesc(e.target.value)} placeholder="What does this report cover?"
+              style={{ width: '100%', minHeight: 64, borderRadius: 8, border: '1px solid var(--border)', padding: '8px 12px', fontFamily: "'Inter', sans-serif", fontSize: 13, color: 'var(--text-primary)', background: '#1E293B', resize: 'vertical' }} />
           </div>
           <div>
             <label style={labelSt}>Category</label>
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
               {CATEGORIES.map(c => (
-                <button
-                  key={c}
-                  onClick={() => setNewCat(c)}
-                  style={{
-                    padding: '5px 12px', borderRadius: 20, cursor: 'pointer', fontFamily: "'Inter', sans-serif", fontSize: 13,
-                    background: newCat === c ? catColor[c] + '25' : '#263446',
-                    color: newCat === c ? catColor[c] : 'var(--text-secondary)',
-                    border: newCat === c ? `1.5px solid ${catColor[c]}` : '1.5px solid transparent',
-                    transition: 'all 120ms ease',
-                  }}
-                >
-                  {c}
-                </button>
+                <button key={c} onClick={() => setNewCat(c)} style={{
+                  padding: '5px 12px', borderRadius: 20, cursor: 'pointer', fontFamily: "'Inter', sans-serif", fontSize: 13,
+                  background: newCat === c ? catColor[c] + '25' : '#263446',
+                  color: newCat === c ? catColor[c] : 'var(--text-secondary)',
+                  border: newCat === c ? `1.5px solid ${catColor[c]}` : '1.5px solid transparent',
+                  transition: 'all 120ms ease',
+                }}>{c}</button>
               ))}
             </div>
           </div>
           <div>
             <label style={labelSt}>Metrics to Include</label>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, maxHeight: 200, overflowY: 'auto', padding: '4px 0' }}>
-              {tmMetricOptions.map(m => {
+              {faMetricOptions.map(m => {
                 const active = newMetrics.includes(m);
                 return (
-                  <button
-                    key={m}
-                    onClick={() => setNewMetrics(p => active ? p.filter(x => x !== m) : [...p, m])}
-                    style={{
-                      display: 'flex', alignItems: 'center', gap: 5,
-                      padding: '4px 10px', borderRadius: 20, cursor: 'pointer', fontFamily: "'Inter', sans-serif", fontSize: 12,
-                      background: active ? 'rgba(30,134,195,0.15)' : '#263446',
-                      color: active ? '#1E86C3' : 'var(--text-secondary)',
-                      border: active ? '1.5px solid rgba(30,134,195,0.4)' : '1.5px solid transparent',
-                      transition: 'all 120ms ease',
-                    }}
-                  >
+                  <button key={m} onClick={() => setNewMetrics(p => active ? p.filter(x => x !== m) : [...p, m])} style={{
+                    display: 'flex', alignItems: 'center', gap: 5,
+                    padding: '4px 10px', borderRadius: 20, cursor: 'pointer', fontFamily: "'Inter', sans-serif", fontSize: 12,
+                    background: active ? 'rgba(30,134,195,0.15)' : '#263446',
+                    color: active ? '#1E86C3' : 'var(--text-secondary)',
+                    border: active ? '1.5px solid rgba(30,134,195,0.4)' : '1.5px solid transparent',
+                    transition: 'all 120ms ease',
+                  }}>
                     {active && <Check size={11} />}
                     {m}
                   </button>
                 );
               })}
             </div>
-            {newMetrics.length > 0 && (
-              <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 12, color: 'var(--text-tertiary)', marginTop: 8 }}>{newMetrics.length} metric{newMetrics.length !== 1 ? 's' : ''} selected</div>
-            )}
+            {newMetrics.length > 0 && <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 12, color: 'var(--text-tertiary)', marginTop: 8 }}>{newMetrics.length} metric{newMetrics.length !== 1 ? 's' : ''} selected</div>}
           </div>
         </div>
       </Modal>

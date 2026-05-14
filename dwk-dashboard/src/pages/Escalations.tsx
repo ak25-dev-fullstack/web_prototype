@@ -19,21 +19,21 @@ const STATUS_COLORS: Record<EscStatus, { bg: string; color: string }> = {
 };
 
 const accentColor: Record<string, string> = {
-  'critical-complaint': '#EF4444',
-  'capacity-overload':  '#F59E0B',
-  'fin-ai-handover':    '#1E86C3',
+  'critical-complaint':  '#EF4444',
+  'capacity-overload':   '#F59E0B',
+  'unassigned-handover': '#1E86C3',
 };
 
-const badgeVariant: Record<string, 'critical-complaint' | 'capacity-overload' | 'fin-ai-handover'> = {
-  'critical-complaint': 'critical-complaint',
-  'capacity-overload':  'capacity-overload',
-  'fin-ai-handover':    'fin-ai-handover',
+const badgeVariant: Record<string, 'critical-complaint' | 'capacity-overload' | 'unassigned-handover'> = {
+  'critical-complaint':  'critical-complaint',
+  'capacity-overload':   'capacity-overload',
+  'unassigned-handover': 'unassigned-handover',
 };
 
 const actionIcon: Record<string, ReactElement> = {
-  'View Chat History':         <MessageSquare size={13} />,
-  'View Performance Metrics':  <BarChart2 size={13} />,
-  'Review AI Logs':            <FileSearch size={13} />,
+  'View Chat History':        <MessageSquare size={13} />,
+  'View Performance Metrics': <BarChart2 size={13} />,
+  'View Case Notes':          <FileSearch size={13} />,
 };
 
 const REASONS = ['Capacity Overload', 'Expertise Mismatch', 'Client Request', 'Complaint Resolution', 'Adviser Leaving', 'Other'];

@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import {
-  LayoutDashboard, Users, TrendingUp, Calendar,
-  FileText, ShieldCheck, GraduationCap, Settings, X,
+  LayoutDashboard, Users, Calendar,
+  FileText, ShieldCheck, GraduationCap, BarChart2, Settings, X,
 } from 'lucide-react';
 import DWKLogo from '../ui/DWKLogo';
 import { useLayout } from '../../context/LayoutContext';
@@ -9,10 +9,10 @@ import { useLayout } from '../../context/LayoutContext';
 const navItems = [
   { to: '/adviser/dashboard',   label: 'Dashboard',   Icon: LayoutDashboard },
   { to: '/adviser/clients',     label: 'My Clients',  Icon: Users },
-  { to: '/adviser/portfolio',   label: 'Portfolio',   Icon: TrendingUp },
   { to: '/adviser/calendar',    label: 'Calendar',    Icon: Calendar },
   { to: '/adviser/documents',   label: 'Documents',   Icon: FileText },
   { to: '/adviser/compliance',  label: 'Compliance',  Icon: ShieldCheck },
+  { to: '/adviser/reports',     label: 'Reports',     Icon: BarChart2 },
   { to: '/adviser/education',   label: 'Education',   Icon: GraduationCap },
 ];
 

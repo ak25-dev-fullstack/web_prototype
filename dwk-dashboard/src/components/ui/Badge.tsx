@@ -1,12 +1,12 @@
 import type { ReactNode } from 'react';
 
-type BadgeVariant = 'critical-complaint' | 'capacity-overload' | 'fin-ai-handover' | 'high-match' | 'on-track' | 'review-required' | 'top-performer';
+type BadgeVariant = 'critical-complaint' | 'capacity-overload' | 'unassigned-handover' | 'high-match' | 'on-track' | 'review-required' | 'top-performer';
 
 const styles: Record<BadgeVariant, { bg: string; color: string; border?: string }> = {
-  'critical-complaint': { bg: 'rgba(239,68,68,0.12)',   color: '#EF4444', border: 'rgba(239,68,68,0.3)' },
-  'capacity-overload':  { bg: 'rgba(245,158,11,0.12)',  color: '#F59E0B', border: 'rgba(245,158,11,0.3)' },
-  'fin-ai-handover':    { bg: 'rgba(30,134,195,0.15)',  color: '#1E86C3', border: 'rgba(30,134,195,0.3)' },
-  'high-match':         { bg: 'rgba(34,197,94,0.12)',   color: '#22C55E', border: 'rgba(34,197,94,0.3)' },
+  'critical-complaint':  { bg: 'rgba(239,68,68,0.12)',   color: '#EF4444', border: 'rgba(239,68,68,0.3)' },
+  'capacity-overload':   { bg: 'rgba(245,158,11,0.12)',  color: '#F59E0B', border: 'rgba(245,158,11,0.3)' },
+  'unassigned-handover': { bg: 'rgba(30,134,195,0.15)',  color: '#1E86C3', border: 'rgba(30,134,195,0.3)' },
+  'high-match':          { bg: 'rgba(34,197,94,0.12)',   color: '#22C55E', border: 'rgba(34,197,94,0.3)' },
   'on-track':           { bg: 'rgba(34,197,94,0.12)',   color: '#22C55E' },
   'review-required':    { bg: 'rgba(239,68,68,0.12)',   color: '#EF4444' },
   'top-performer':      { bg: '#1E86C3',                color: '#FFFFFF' },

@@ -183,6 +183,45 @@ export const faDocuments: Document[] = [
   { id: 'd12', name: 'Pension Transfer Analysis', client: "Liam O'Brien", type: 'Advisory', date: '2026-03-30' },
 ];
 
+export interface CategorisationItem {
+  id: string;
+  client: string;
+  clientInitials: string;
+  date: string;
+  description: string;
+  amount: string;
+  amountType: 'Debit' | 'Credit';
+  currentCategory: string;
+  confidence: number;
+  suggestedCategory?: string;
+  status: 'Pending' | 'Confirmed' | 'Overridden';
+  overriddenTo?: string;
+  reviewedAt?: string;
+}
+
+export const categorisationItems: CategorisationItem[] = [
+  { id: 'ci1',  client: 'Emily Sutherland',  clientInitials: 'ES', date: '2026-05-10', description: 'Bloomberg Terminal Sub.', amount: '£2,100.00', amountType: 'Debit', currentCategory: 'Business',       confidence: 78, status: 'Pending' },
+  { id: 'ci2',  client: 'Emily Sutherland',  clientInitials: 'ES', date: '2026-05-09', description: 'Quintessentially Members Club', amount: '£850.00', amountType: 'Debit', currentCategory: 'Entertainment', confidence: 41, suggestedCategory: 'Dining', status: 'Pending' },
+  { id: 'ci3',  client: 'Emily Sutherland',  clientInitials: 'ES', date: '2026-05-07', description: 'Walpole Fine Art Auction', amount: '£4,200.00', amountType: 'Debit', currentCategory: 'Shopping',       confidence: 34, suggestedCategory: 'Investment', status: 'Pending' },
+  { id: 'ci4',  client: 'Sophia Andersson',  clientInitials: 'SA', date: '2026-05-08', description: 'Coutts Private Banking Fee',    amount: '£220.00',  amountType: 'Debit', currentCategory: 'Business',       confidence: 82, status: 'Pending' },
+  { id: 'ci5',  client: 'Sophia Andersson',  clientInitials: 'SA', date: '2026-05-06', description: 'Offshore Transfer — Isle of Man', amount: '£15,000.00', amountType: 'Debit', currentCategory: 'Savings', confidence: 55, suggestedCategory: 'Investment', status: 'Pending' },
+  { id: 'ci6',  client: 'Robert Hannigan',   clientInitials: 'RH', date: '2026-05-09', description: 'HMRC Self Assessment',      amount: '£1,200.00', amountType: 'Debit', currentCategory: 'Tax',            confidence: 91, status: 'Confirmed', reviewedAt: '2026-05-10 09:15' },
+  { id: 'ci7',  client: 'Robert Hannigan',   clientInitials: 'RH', date: '2026-05-07', description: 'Adobe Creative Cloud',      amount: '£54.98',   amountType: 'Debit', currentCategory: 'Business',       confidence: 88, status: 'Confirmed', reviewedAt: '2026-05-10 09:16' },
+  { id: 'ci8',  client: 'Margaret Chen',     clientInitials: 'MC', date: '2026-05-07', description: 'Netflix',                   amount: '£17.99',   amountType: 'Debit', currentCategory: 'Entertainment',  confidence: 97, status: 'Confirmed', reviewedAt: '2026-05-09 14:30' },
+  { id: 'ci9',  client: 'James Thornton',    clientInitials: 'JT', date: '2026-05-04', description: 'HMRC Payment Ref 29KX',     amount: '£890.00',  amountType: 'Debit', currentCategory: 'Tax',            confidence: 67, suggestedCategory: 'Other', status: 'Pending' },
+  { id: 'ci10', client: 'Fatima Al-Rashid',  clientInitials: 'FR', date: '2026-05-03', description: 'Amazon Business Prime',     amount: '£340.00',  amountType: 'Debit', currentCategory: 'Shopping',       confidence: 58, suggestedCategory: 'Business', status: 'Overridden', overriddenTo: 'Business', reviewedAt: '2026-05-08 11:00' },
+  { id: 'ci11', client: 'Helena Browne',     clientInitials: 'HB', date: '2026-05-01', description: 'Capital at Risk — Wealthify', amount: '£500.00', amountType: 'Debit', currentCategory: 'Savings',       confidence: 43, suggestedCategory: 'Investment', status: 'Pending' },
+  { id: 'ci12', client: "Liam O'Brien",      clientInitials: 'LO', date: '2026-05-03', description: 'Aviva Investment Top-up',   amount: '£1,500.00', amountType: 'Debit', currentCategory: 'Savings',      confidence: 74, status: 'Pending' },
+];
+
+export const categorisationAuditLog = [
+  { id: 'al1', timestamp: '2026-05-10 09:15', adviser: 'Sarah Mitchell', client: 'Robert Hannigan', description: 'HMRC Self Assessment', from: 'Tax', to: 'Tax', action: 'Confirmed' },
+  { id: 'al2', timestamp: '2026-05-10 09:16', adviser: 'Sarah Mitchell', client: 'Robert Hannigan', description: 'Adobe Creative Cloud', from: 'Business', to: 'Business', action: 'Confirmed' },
+  { id: 'al3', timestamp: '2026-05-09 14:30', adviser: 'Sarah Mitchell', client: 'Margaret Chen', description: 'Netflix', from: 'Entertainment', to: 'Entertainment', action: 'Confirmed' },
+  { id: 'al4', timestamp: '2026-05-08 11:00', adviser: 'Sarah Mitchell', client: 'Fatima Al-Rashid', description: 'Amazon Business Prime', from: 'Shopping', to: 'Business', action: 'Overridden' },
+  { id: 'al5', timestamp: '2026-05-07 16:20', adviser: 'Sarah Mitchell', client: 'David Okonkwo', description: 'Monthly Salary', from: 'Income', to: 'Income', action: 'Confirmed' },
+];
+
 export const auditLog = [
   { timestamp: '2026-05-13 09:12', user: 'Sarah Mitchell', action: 'View', target: 'Margaret Chen — Client Record', ip: '192.168.1.45' },
   { timestamp: '2026-05-13 09:45', user: 'Sarah Mitchell', action: 'Export', target: 'Q1 Spending Report — PDF', ip: '192.168.1.45' },

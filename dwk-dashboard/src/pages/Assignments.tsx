@@ -1,51 +1,58 @@
-import { useState, useEffect } from 'react';
-import { DollarSign, AlertTriangle, CheckCircle, Cpu, SlidersHorizontal, X, Plus, ChevronRight } from 'lucide-react';
+import { useState } from 'react';
+import { DollarSign, AlertTriangle, CheckCircle, SlidersHorizontal, ChevronRight, Star, Users } from 'lucide-react';
 import Avatar from '../components/ui/Avatar';
 import Badge from '../components/ui/Badge';
 import Button from '../components/ui/Button';
-import { pendingClients, finAiMatches, adviserPanelList } from '../data/mock';
+import Card from '../components/ui/Card';
+import ProgressBar from '../components/ui/ProgressBar';
+import { useToast } from '../context/ToastContext';
+import { pendingClients, advisers } from '../data/mock';
 
-const capacityColor = (pct: number) => pct > 80 ? '#EF4444' : pct > 50 ? '#F59E0B' : '#1E86C3';
+const capacityColor = (pct: number) => pct > 80 ? '#EF4444' : pct > 60 ? '#F59E0B' : '#22C55E';
 
-function ExpertiseBar({ label, pct, delay }: { label: string; pct: number; delay: number }) {
-  const [width, setWidth] = useState(0);
-  useEffect(() => {
-    const t = setTimeout(() => setWidth(pct), delay);
-    return () => clearTimeout(t);
-  }, [pct, delay]);
-  return (
-    <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-        <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 12, color: 'var(--text-secondary)' }}>{label}</span>
-        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: 'var(--text-primary)' }}>{pct}%</span>
-      </div>
-      <div style={{ height: 8, background: '#EDF0EF', borderRadius: 9999, overflow: 'hidden' }}>
-        <div style={{
-          height: '100%', background: '#1E86C3', borderRadius: 9999,
-          width: `${width}%`,
-          transition: 'width 600ms cubic-bezier(0.34, 1.56, 0.64, 1)',
-        }} />
-      </div>
-    </div>
-  );
+function score(adv: typeof advisers[0]) {
+  return Math.round((adv.satisfaction * 12) + (100 - adv.capacityPct) * 0.5 - adv.complaints * 5);
 }
 
 export default function Assignments() {
+  const { showToast } = useToast();
   const [selectedClient, setSelectedClient] = useState('c1');
+  const [assignedAdviser, setAssignedAdviser] = useState<string | null>(null);
+  const [sortBy, setSortBy] = useState<'recommended' | 'capacity' | 'satisfaction'>('recommended');
+
+  const client = pendingClients.find(c => c.id === selectedClient);
+
+  const sorted = [...advisers].sort((a, b) => {
+    if (sortBy === 'capacity') return a.capacityPct - b.capacityPct;
+    if (sortBy === 'satisfaction') return b.satisfaction - a.satisfaction;
+    return score(b) - score(a);
+  });
+
+  const recommended = sorted[0];
+
+  function handleAssign(adviserId: string) {
+    const adv = advisers.find(a => a.id === adviserId);
+    setAssignedAdviser(adviserId);
+    showToast(`${client?.name ?? 'Client'} assigned to ${adv?.name ?? 'adviser'}.`);
+  }
 
   return (
     <div>
       <div style={{ marginBottom: 24 }}>
-        <h1 style={{ fontFamily: "'Inter', sans-serif", fontSize: 24, fontWeight: 600 }}>Assignments</h1>
+        <h1 style={{ fontFamily: "'Inter', sans-serif", fontSize: 22, fontWeight: 700 }}>Assignments</h1>
+        <p style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, color: 'var(--text-secondary)', marginTop: 4 }}>
+          Review pending clients and assign them to an adviser.
+        </p>
       </div>
 
       <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
+
         {/* Left — Pending Clients */}
         <div style={{ width: 240, flexShrink: 0 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-            <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 16, fontWeight: 600 }}>Pending Clients</span>
-            <span style={{ background: 'rgba(239,68,68,0.12)', color: '#EF4444', border: '1px solid rgba(239,68,68,0.3)', borderRadius: 9999, padding: '2px 8px', fontFamily: "'Inter', sans-serif", fontSize: 11, fontWeight: 500, letterSpacing: '0.04em' }}>
-              4 FLAGGED
+            <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 15, fontWeight: 600 }}>Pending Clients</span>
+            <span style={{ background: 'rgba(239,68,68,0.12)', color: '#EF4444', border: '1px solid rgba(239,68,68,0.3)', borderRadius: 9999, padding: '2px 8px', fontFamily: "'Inter', sans-serif", fontSize: 11, fontWeight: 500 }}>
+              {pendingClients.filter(c => c.flagged).length} FLAGGED
             </span>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -54,35 +61,32 @@ export default function Assignments() {
               return (
                 <div
                   key={client.id}
-                  onClick={() => setSelectedClient(client.id)}
+                  onClick={() => { setSelectedClient(client.id); setAssignedAdviser(null); }}
                   style={{
                     border: active ? '2px solid #1E86C3' : '1px solid var(--border)',
-                    borderRadius: 10, background: active ? '#FFFFFF' : 'var(--neutral-50)',
+                    borderRadius: 10, background: active ? 'rgba(30,134,195,0.06)' : '#1E293B',
                     padding: 12, cursor: 'pointer', transition: 'all 150ms ease',
                   }}
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 4 }}>
-                    <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 15, fontWeight: 600, color: 'var(--text-primary)' }}>{client.name}</span>
-                    {active && <CheckCircle size={16} color="#1E86C3" />}
+                    <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 600, color: 'var(--text-primary)' }}>{client.name}</span>
+                    {active && <CheckCircle size={15} color="#1E86C3" />}
                   </div>
                   <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>{client.industry}</div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginBottom: client.flags.length ? 6 : 0 }}>
-                    <DollarSign size={13} color="var(--text-secondary)" />
+                    <DollarSign size={12} color="var(--text-secondary)" />
                     <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 12, color: 'var(--text-secondary)' }}>{client.liquidity}</span>
                   </div>
                   {client.flags.map(flag => (
-                    <div key={flag} style={{ display: 'flex', alignItems: 'center', gap: 4, marginBottom: 6 }}>
-                      <AlertTriangle size={13} color="#EF4444" />
-                      <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 12, color: '#EF4444' }}>{flag}</span>
+                    <div key={flag} style={{ display: 'flex', alignItems: 'center', gap: 4, marginBottom: 4 }}>
+                      <AlertTriangle size={12} color="#EF4444" />
+                      <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 11, color: '#EF4444' }}>{flag}</span>
                     </div>
                   ))}
                   {client.needs.length > 0 && (
-                    <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                    <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginTop: 4 }}>
                       {client.needs.map(need => (
-                        <span key={need} style={{
-                          border: '1px solid #1E86C3', borderRadius: 9999, padding: '2px 8px',
-                          fontFamily: "'Inter', sans-serif", fontSize: 11, color: '#1E86C3',
-                        }}>{need}</span>
+                        <span key={need} style={{ border: '1px solid #1E86C3', borderRadius: 9999, padding: '1px 8px', fontFamily: "'Inter', sans-serif", fontSize: 11, color: '#1E86C3' }}>{need}</span>
                       ))}
                     </div>
                   )}
@@ -92,117 +96,121 @@ export default function Assignments() {
           </div>
         </div>
 
-        {/* Centre — Fin AI Matching */}
+        {/* Centre — Adviser selection */}
         <div style={{ flex: 1, minWidth: 0 }}>
-          {/* Header */}
-          <div style={{ background: '#0A1A2F', borderRadius: '12px 12px 0 0', padding: '16px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#1E86C3', display: 'inline-block', boxShadow: '0 0 0 3px rgba(45,212,191,0.3)', animation: 'pulse 2s infinite' }} />
-                <Cpu size={16} color="#1E86C3" />
-                <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 15, fontWeight: 600, color: '#FFFFFF' }}>Fin AI Intelligent Matching</span>
-              </div>
-              <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 12, color: '#94A3B8' }}>Analysing 124 advisers for Harrington Tech Grp</div>
-            </div>
-            <div style={{ textAlign: 'right' }}>
-              <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 11, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 2 }}>STATUS</div>
-              <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, color: '#1E86C3' }}>Optimising Portfolio</div>
-            </div>
-          </div>
-
-          {/* Filter row */}
-          <div style={{ background: '#1E293B', border: '1px solid var(--border)', borderTop: 'none', padding: '10px 16px', display: 'flex', alignItems: 'center', gap: 10 }}>
-            <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, color: 'var(--text-secondary)' }}>Manual Override</span>
-            <span style={{ display: 'flex', alignItems: 'center', gap: 4, background: 'var(--primary-light)', color: 'var(--primary)', borderRadius: 9999, padding: '2px 10px', fontFamily: "'Inter', sans-serif", fontSize: 12 }}>
-              Tax Advisory <X size={11} style={{ cursor: 'pointer' }} />
-            </span>
-            <span style={{ display: 'flex', alignItems: 'center', gap: 4, border: '1px dashed var(--border)', borderRadius: 9999, padding: '2px 10px', fontFamily: "'Inter', sans-serif", fontSize: 12, color: 'var(--text-tertiary)', cursor: 'pointer' }}>
-              Capacity <Plus size={11} />
-            </span>
-          </div>
-
-          {/* Match cards */}
-          <div style={{ border: '1px solid var(--border)', borderTop: 'none', borderRadius: '0 0 12px 12px', overflow: 'hidden' }}>
-            {finAiMatches.map((match, i) => (
-              <div key={match.rank} style={{
-                background: i === 0 ? '#FFFFFF' : 'var(--neutral-50)',
-                border: i === 0 ? '2px solid #1E86C3' : '1px solid var(--border)',
-                margin: 12,
-                borderRadius: 10,
-                padding: 16,
-                marginBottom: i < finAiMatches.length - 1 ? 0 : 12,
-              }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13, color: 'var(--text-tertiary)' }}>#{match.rank}</span>
-                    <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 500 }}>{match.adviser}</span>
-                    {match.match && <Badge variant="high-match">{match.match}</Badge>}
-                  </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: i === 0 ? 28 : 18, fontWeight: 500, color: '#1E86C3', lineHeight: 1 }}>{match.compatibility}%</div>
-                    {i === 0 && <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 11, color: 'var(--text-tertiary)' }}>Compatibility</div>}
-                  </div>
+          {assignedAdviser ? (
+            <Card>
+              <div style={{ textAlign: 'center', padding: '32px 20px' }}>
+                <div style={{ width: 52, height: 52, borderRadius: '50%', background: 'var(--success-bg)', border: '1px solid var(--success-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+                  <CheckCircle size={24} color="#22C55E" />
                 </div>
+                <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 18, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 8 }}>Client Assigned</div>
+                <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, color: 'var(--text-secondary)', marginBottom: 20 }}>
+                  {client?.name} has been assigned to <strong style={{ color: 'var(--text-primary)' }}>{advisers.find(a => a.id === assignedAdviser)?.name}</strong>.
+                </div>
+                <Button variant="ghost" onClick={() => setAssignedAdviser(null)}>Reassign</Button>
+              </div>
+            </Card>
+          ) : (
+            <>
+              {/* Sort bar */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14, flexWrap: 'wrap' }}>
+                <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: 5 }}>
+                  <SlidersHorizontal size={14} /> Sort by:
+                </span>
+                {(['recommended', 'capacity', 'satisfaction'] as const).map(s => (
+                  <button
+                    key={s}
+                    onClick={() => setSortBy(s)}
+                    style={{
+                      padding: '4px 12px', borderRadius: 20, cursor: 'pointer',
+                      fontFamily: "'Inter', sans-serif", fontSize: 13,
+                      background: sortBy === s ? 'rgba(30,134,195,0.15)' : '#263446',
+                      color: sortBy === s ? '#1E86C3' : 'var(--text-secondary)',
+                      border: sortBy === s ? '1px solid rgba(30,134,195,0.3)' : '1px solid transparent',
+                      transition: 'all 120ms ease',
+                    }}
+                  >
+                    {s.charAt(0).toUpperCase() + s.slice(1)}
+                  </button>
+                ))}
+              </div>
 
-                {i === 0 ? (
-                  <div style={{ display: 'flex', gap: 20 }}>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 11, fontWeight: 500, color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 6 }}>Rationale</div>
-                      <p style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.6 }}>{match.rationale}</p>
-                    </div>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 11, fontWeight: 500, color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 8 }}>Expertise Overlap</div>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                        {match.expertise.map((exp, ei) => (
-                          <ExpertiseBar key={exp.label} label={exp.label} pct={exp.pct} delay={300 + ei * 100} />
-                        ))}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {sorted.map((adv, i) => {
+                  const isTop = i === 0 && sortBy === 'recommended';
+                  return (
+                    <div
+                      key={adv.id}
+                      style={{
+                        border: isTop ? '2px solid rgba(30,134,195,0.4)' : '1px solid var(--border)',
+                        borderRadius: 12,
+                        background: isTop ? 'rgba(30,134,195,0.05)' : '#1E293B',
+                        padding: '16px 18px',
+                        transition: 'border-color 150ms ease',
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 14 }}>
+                        <Avatar initials={adv.avatar} size={40} />
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 2, flexWrap: 'wrap' }}>
+                            <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 15, fontWeight: 600 }}>{adv.name}</span>
+                            {isTop && (
+                              <span style={{ padding: '2px 8px', borderRadius: 20, background: 'rgba(30,134,195,0.15)', color: '#1E86C3', fontFamily: "'Inter', sans-serif", fontSize: 11, fontWeight: 600, border: '1px solid rgba(30,134,195,0.3)' }}>
+                                Recommended
+                              </span>
+                            )}
+                            <Badge variant={adv.status === 'on-track' ? 'on-track' : 'review-required'}>
+                              {adv.status === 'on-track' ? 'On Track' : 'Review Required'}
+                            </Badge>
+                          </div>
+                          <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, color: 'var(--text-secondary)', marginBottom: 12 }}>{adv.role}</div>
+
+                          <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', marginBottom: 12 }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                              <Users size={13} color="var(--text-tertiary)" />
+                              <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, color: 'var(--text-secondary)' }}>{adv.clients} clients</span>
+                            </div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                              <Star size={13} fill="#1E86C3" color="#1E86C3" />
+                              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13 }}>{adv.satisfaction}</span>
+                            </div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                              <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, color: 'var(--text-secondary)' }}>Capacity:</span>
+                              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13, color: capacityColor(adv.capacityPct) }}>{adv.capacityPct}%</span>
+                            </div>
+                            {adv.complaints > 0 && (
+                              <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                                <AlertTriangle size={13} color={adv.complaints > 3 ? '#EF4444' : '#F59E0B'} />
+                                <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, color: adv.complaints > 3 ? '#EF4444' : '#F59E0B' }}>{adv.complaints} complaint{adv.complaints !== 1 ? 's' : ''}</span>
+                              </div>
+                            )}
+                          </div>
+
+                          <div style={{ marginBottom: 12 }}>
+                            <ProgressBar pct={adv.capacityPct} height={5} color={capacityColor(adv.capacityPct)} animated={false} />
+                          </div>
+                        </div>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 8, flexShrink: 0 }}>
+                          <div style={{ textAlign: 'right' }}>
+                            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 22, fontWeight: 600, color: '#1E86C3', lineHeight: 1 }}>{score(adv)}</div>
+                            <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 11, color: 'var(--text-tertiary)' }}>score</div>
+                          </div>
+                          <Button variant={isTop ? 'primary' : 'ghost'} size="sm" onClick={() => handleAssign(adv.id)}>
+                            Assign →
+                          </Button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ) : (
-                  <p style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.6 }}>{match.rationale}</p>
-                )}
-
-                {i === 0 && (
-                  <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 14 }}>
-                    <Button variant="primary">Confirm Assignment →</Button>
-                  </div>
-                )}
+                  );
+                })}
               </div>
-            ))}
-          </div>
+            </>
+          )}
         </div>
 
-        {/* Right — Adviser list */}
-        <div style={{ width: 200, flexShrink: 0 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-            <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 600 }}>Manual Override</span>
-            <SlidersHorizontal size={15} color="var(--text-tertiary)" />
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {adviserPanelList.map(adv => (
-              <div key={adv.name} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 10px', background: '#1E293B', border: '1px solid var(--border)', borderRadius: 8, cursor: 'pointer' }}>
-                <Avatar initials={adv.avatar} size={36} />
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, fontWeight: 500, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{adv.name}</div>
-                  <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 11, color: 'var(--text-secondary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{adv.role}</div>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: capacityColor(adv.capacity) }}>{adv.capacity}%</span>
-                  <ChevronRight size={13} color="var(--text-tertiary)" />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
-
-      <style>{`
-        @keyframes pulse {
-          0%, 100% { box-shadow: 0 0 0 3px rgba(45,212,191,0.3); }
-          50% { box-shadow: 0 0 0 6px rgba(45,212,191,0.1); }
-        }
-      `}</style>
     </div>
   );
 }
